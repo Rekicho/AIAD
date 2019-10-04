@@ -1,3 +1,5 @@
+package src;
+
 import jade.core.Agent;
 import java.util.HashMap;
 
