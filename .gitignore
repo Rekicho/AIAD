@@ -1,4 +1,9 @@
 .vscode
 *.class
+
 APDescription.txt
 MTPS-Main-Container.txt
+
+compile.sh
+win-compile.bat
+.DS_STORE
