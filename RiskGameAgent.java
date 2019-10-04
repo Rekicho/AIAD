@@ -15,6 +15,13 @@ public class RiskGameAgent extends Agent {
     }
 
     public void setup(){
-        
+        Object[] args = getArguments();
+
+        if(args == null)
+            return;
+
+        int players = Integer.parseInt(args[0].toString());
+
+        System.out.println(startingArmies.get(players));
     }
 }
