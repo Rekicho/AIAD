@@ -1,13 +1,13 @@
 package src;
 
-import java.util.*;
+import java.util.HashMap;
 
 public class Country {
     String name;
-    HashSet<Country> neighbours;
+    HashMap<String,Country> neighbours;
 
     public Country(String name) {
         this.name = name;
-        neighbours = new HashSet<Country>();
+        neighbours = new HashMap<String,Country>();
     }
 }
