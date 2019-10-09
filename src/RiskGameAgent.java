@@ -82,6 +82,54 @@ public class RiskGameAgent extends Agent {
         mapsMap.put("Western Australia", new Country("Western Australia"));
 
         countries = mapsMap;
+
+        continents.get("North America").addCountry(countries.get("Alaska"));
+        continents.get("North America").addCountry(countries.get("Alberta"));
+        continents.get("North America").addCountry(countries.get("Central America"));
+        continents.get("North America").addCountry(countries.get("Eastern United States"));
+        continents.get("North America").addCountry(countries.get("Greenland"));
+        continents.get("North America").addCountry(countries.get("Northwest Territory"));
+        continents.get("North America").addCountry(countries.get("Ontario"));
+        continents.get("North America").addCountry(countries.get("Quebec"));
+        continents.get("North America").addCountry(countries.get("Western United States"));
+
+        continents.get("Europe").addCountry(countries.get("Great Britain"));
+        continents.get("Europe").addCountry(countries.get("Iceland"));
+        continents.get("Europe").addCountry(countries.get("Northern Europe"));
+        continents.get("Europe").addCountry(countries.get("Scandinavia"));
+        continents.get("Europe").addCountry(countries.get("Southern Europe"));
+        continents.get("Europe").addCountry(countries.get("Ukraine"));
+        continents.get("Europe").addCountry(countries.get("Western Europe"));
+
+        continents.get("Asia").addCountry(countries.get("Afghanistan"));
+        continents.get("Asia").addCountry(countries.get("China"));
+        continents.get("Asia").addCountry(countries.get("India"));
+        continents.get("Asia").addCountry(countries.get("Irkutsk"));
+        continents.get("Asia").addCountry(countries.get("Japan"));
+        continents.get("Asia").addCountry(countries.get("Kamchatka"));
+        continents.get("Asia").addCountry(countries.get("Middle East"));
+        continents.get("Asia").addCountry(countries.get("Mongolia"));
+        continents.get("Asia").addCountry(countries.get("Siam"));
+        continents.get("Asia").addCountry(countries.get("Siberia"));
+        continents.get("Asia").addCountry(countries.get("Ural"));
+        continents.get("Asia").addCountry(countries.get("Ukraine"));
+
+        continents.get("South America").addCountry(countries.get("Argentina"));
+        continents.get("South America").addCountry(countries.get("Brazil"));
+        continents.get("South America").addCountry(countries.get("Peru"));
+        continents.get("South America").addCountry(countries.get("Venezuela"));
+
+        continents.get("Africa").addCountry(countries.get("Congo"));
+        continents.get("Africa").addCountry(countries.get("East Africa"));
+        continents.get("Africa").addCountry(countries.get("Egypt"));
+        continents.get("Africa").addCountry(countries.get("Madagascar"));
+        continents.get("Africa").addCountry(countries.get("North Africa"));
+        continents.get("Africa").addCountry(countries.get("South Africa"));
+
+        continents.get("Australia").addCountry(countries.get("Eastern Australia"));
+        continents.get("Australia").addCountry(countries.get("Indonesia"));
+        continents.get("Australia").addCountry(countries.get("New Guinea"));
+        continents.get("Australia").addCountry(countries.get("Western Australia"));
     }
 
     public void setup(){
@@ -91,7 +139,5 @@ public class RiskGameAgent extends Agent {
             return;
 
         int players = Integer.parseInt(args[0].toString());
-
-        System.out.println(startingArmies.get(players));
     }
 }
