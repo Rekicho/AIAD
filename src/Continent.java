@@ -1,6 +1,8 @@
 package src;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class Continent {
     String name;
@@ -13,5 +15,19 @@ public class Continent {
 
     public void addCountry(Country country) {
         countries.put(country.name,country);
+    }
+
+    public String toString() {
+        String res = name + ": ";
+
+        Iterator it = countries.entrySet().iterator();
+
+        while(it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            res += pair.getKey() + ", ";
+            it.remove();
+        }
+        
+        return res;
     }
 }

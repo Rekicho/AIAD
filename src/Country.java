@@ -4,10 +4,18 @@ import java.util.HashMap;
 
 public class Country {
     String name;
-    HashMap<String,Country> neighbours;
+    HashMap<String,Country> borders;
 
     public Country(String name) {
         this.name = name;
-        neighbours = new HashMap<String,Country>();
+        borders = new HashMap<String,Country>();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void addBorder(Country border) {
+        borders.put(border.getName(), border);
     }
 }
