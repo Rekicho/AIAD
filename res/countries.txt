@@ -9,7 +9,7 @@ North America->Quebec
 North America->Western United States
 Europe ->Great Britain
 Europe ->Iceland
-Europe ->Northen Europe
+Europe ->Northern Europe
 Europe ->Scandinavia
 Europe ->Southern Europe
 Europe ->Ukraine

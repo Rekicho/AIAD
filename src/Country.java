@@ -18,4 +18,8 @@ public class Country {
     public void addBorder(Country border) {
         borders.put(border.getName(), border);
     }
+
+    public int borderCount() {
+        return borders.size();
+    }
 }

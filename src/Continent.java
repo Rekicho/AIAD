@@ -24,7 +24,7 @@ public class Continent {
 
         while(it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
-            res += pair.getKey() + ", ";
+            res += pair.getKey() + "(" + ((Country) pair.getValue()).borderCount() + "), ";
             it.remove();
         }
         

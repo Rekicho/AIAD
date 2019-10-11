@@ -50,19 +50,19 @@ public class RiskGameAgent extends Agent {
         continents = continentsMap;
         countries = countriesMap;
 
-        // try {
-        //     BufferedReader reader = new BufferedReader(new FileReader("res/borders.txt"));
-        //     String line = reader.readLine();
-        //     while (line != null) {
-        //         String[] parts = line.split("->");
-        //         countries.get(parts[0]).addBorder(countries.get(parts[1]));
-        //         countries.get(parts[1]).addBorder(countries.get(parts[0]));
-        //         line = reader.readLine();
-        //     }
-        // } catch(IOException e) {
-        //     e.printStackTrace();
-        //     System.err.println("[Risk Game Agent] Could not load borders");
-        // }
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("res/borders.txt"));
+            String line = reader.readLine();
+            while (line != null) {
+                String[] parts = line.split("->");
+                countries.get(parts[0]).addBorder(countries.get(parts[1]));
+                countries.get(parts[1]).addBorder(countries.get(parts[0]));
+                line = reader.readLine();
+            }
+        } catch(IOException e) {
+            e.printStackTrace();
+            System.err.println("[Risk Game Agent] Could not load borders");
+        }
     }
 
     public void setup(){

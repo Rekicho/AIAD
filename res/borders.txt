@@ -1,0 +1,83 @@
+Alaska->Alberta
+Alaska->Northwest Territory
+Alaska->Kamchatka
+Alberta->Northwest Territory
+Alberta->Ontario
+Alberta->Western United States
+Central America->Eastern United States
+Central America->Western United States
+Central America->Venezuela
+Eastern United States->Ontario
+Eastern United States->Quebec
+Eastern United States->Western United States
+Greenland->Northwest Territory
+Greenland->Ontario
+Greenland->Quebec
+Greenland->Iceland
+Northwest Territory->Ontario
+Ontario->Quebec
+Ontario->Western United States
+Great Britain->Iceland
+Great Britain->Northern Europe
+Great Britain->Scandinavia
+Great Britain->Western Europe
+Iceland->Scandinavia
+Northern Europe->Scandinavia
+Northern Europe->Southern Europe
+Northern Europe->Ukraine
+Northern Europe->Western Europe
+Scandinavia->Ukraine
+Southern Europe->Ukraine
+Southern Europe->Western Europe
+Southern Europe->Middle East
+Southern Europe->Egypt
+Southern Europe->North Africa
+Ukraine->Afghanistan
+Ukraine->Middle East
+Ukraine->Ural
+Western Europe->North Africa
+Afghanistan->China
+Afghanistan->India
+Afghanistan->Middle East
+Afghanistan->Ural
+China->India
+China->Mongolia
+China->Siam
+China->Siberia
+China->Ural
+India->Middle East
+India->Siam
+Irkutsk->Kamchatka
+Irkutsk->Mongolia
+Irkutsk->Siberia
+Irkutsk->Yakutsk
+Japan->Kamchatka
+Japan->Mongolia
+Kamchatka->Mongolia
+Kamchatka->Yakutsk
+Middle East->East Africa
+Middle East->Egypt
+Mongolia->Siberia
+Siam->Indonesia
+Siberia->Ural
+Siberia->Yakutsk
+Argentina->Brazil
+Argentina->Peru
+Brazil->Peru
+Brazil->Venezuela
+Brazil->North Africa
+Peru->Venezuela
+Congo->East Africa
+Congo->North Africa
+Congo->South Africa
+East Africa->Egypt
+East Africa->Madagascar
+East Africa->North Africa
+East Africa->South Africa
+Egypt->North Africa
+Madagascar->South Africa
+Eastern Australia->New Guinea
+Eastern Australia->Western Australia
+Indonesia->New Guinea
+Indonesia->Western Australia
+New Guinea->Western Australia
