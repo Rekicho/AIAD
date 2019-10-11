@@ -4,11 +4,11 @@ import java.util.HashMap;
 
 public class Country {
     String name;
-    HashMap<String,Country> borders;
+    HashMap<String, Country> borders;
 
     public Country(String name) {
         this.name = name;
-        borders = new HashMap<String,Country>();
+        borders = new HashMap<String, Country>();
     }
 
     public String getName() {

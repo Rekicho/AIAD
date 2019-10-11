@@ -6,15 +6,15 @@ import java.util.Map;
 
 public class Continent {
     String name;
-    HashMap<String,Country> countries;
+    HashMap<String, Country> countries;
 
     public Continent(String name) {
         this.name = name;
-        countries = new HashMap<String,Country>();
+        countries = new HashMap<String, Country>();
     }
 
     public void addCountry(Country country) {
-        countries.put(country.name,country);
+        countries.put(country.name, country);
     }
 
     public String toString() {
@@ -22,12 +22,12 @@ public class Continent {
 
         Iterator it = countries.entrySet().iterator();
 
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
             res += pair.getKey() + "(" + ((Country) pair.getValue()).borderCount() + "), ";
             it.remove();
         }
-        
+
         return res;
     }
 }
