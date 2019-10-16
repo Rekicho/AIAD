@@ -1,5 +1,6 @@
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
+import jade.lang.acl.ACLMessage;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -13,9 +14,11 @@ import src.Continent;
 
 public class RiskGameAgent extends Agent {
     private int numberPlayers;
+    private int joinedPlayers = 0;
     private static final HashMap<Integer, Integer> startingArmies;
     private static final HashMap<String, Country> countries;
     private static final HashMap<String, Continent> continents;
+
     static {
         HashMap<Integer, Integer> startingArmiesMap = new HashMap<Integer, Integer>();
 
@@ -73,9 +76,39 @@ public class RiskGameAgent extends Agent {
             return;
         }
 
-        int players = Integer.parseInt(args[0].toString());
+        numberPlayers = Integer.parseInt(args[0].toString());
 
-        addBehaviour(new MapDisplayBehaviour());
+        addBehaviour(new WaitForPlayers());
+    }
+
+    class WaitForPlayers extends Behaviour {
+        
+        public void action() {
+            System.out.println("waiting for " + (((RiskGameAgent) myAgent).numberPlayers - ((RiskGameAgent) myAgent).joinedPlayers) + " more players.");
+            ACLMessage msg = receive();
+
+            if(msg != null) {
+                joinedPlayers++;
+                System.out.println(msg);
+                // ACLMessage reply = msg.createReply();
+                // reply.setPerformative(ACLMessage.AGREE);
+                // reply.setContent("Added you to the player list.");
+                // send(reply);
+            } else {
+                block();
+            }               
+        }
+
+        public boolean done() {
+            return ((RiskGameAgent) myAgent).joinedPlayers == ((RiskGameAgent) myAgent).numberPlayers;
+        }
+
+        public int onEnd() {
+            System.out.println("Got all players, starting game.");
+            //myAgent.addBehaviour(new MapDisplayBehaviour());
+
+            return 0;
+        }
     }
 
     class MapDisplayBehaviour extends Behaviour {
