@@ -18,13 +18,13 @@ public class Continent {
     }
 
     public String toString() {
-        String res = name + ": ";
+        String res = name + ":";
 
         Iterator it = countries.entrySet().iterator();
 
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
-            res += pair.getKey() + "(" + ((Country) pair.getValue()).borderCount() + "), ";
+            res += "\n   - " + ((Country) pair.getValue());
             it.remove();
         }
 
