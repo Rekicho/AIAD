@@ -1,11 +1,15 @@
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
+import jade.core.AID;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -13,11 +17,10 @@ import src.Country;
 import src.Continent;
 
 public class RiskGameAgent extends Agent {
+    private ArrayList<AID> players;
     private int numberPlayers;
-    private int joinedPlayers = 0;
     private static final HashMap<Integer, Integer> startingArmies;
-    private static final HashMap<String, Country> countries;
-    private static final HashMap<String, Continent> continents;
+    private RiskMap riskMap;
 
     static {
         HashMap<Integer, Integer> startingArmiesMap = new HashMap<Integer, Integer>();
@@ -28,84 +31,59 @@ public class RiskGameAgent extends Agent {
         startingArmiesMap.put(5, 25);
         startingArmiesMap.put(6, 20);
         startingArmies = startingArmiesMap;
-
-        HashMap<String, Continent> continentsMap = new HashMap<String, Continent>();
-        HashMap<String, Country> countriesMap = new HashMap<String, Country>();
-
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("res/countries.txt"));
-            String line = reader.readLine();
-            while (line != null) {
-                String[] parts = line.split("->");
-
-                if (!continentsMap.containsKey(parts[0]))
-                    continentsMap.put(parts[0], new Continent(parts[0]));
-
-                countriesMap.put(parts[1], new Country(parts[1]));
-                continentsMap.get(parts[0]).addCountry(countriesMap.get(parts[1]));
-                line = reader.readLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("[Risk Game Agent] Could not load countries");
-        }
-
-        continents = continentsMap;
-        countries = countriesMap;
-
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("res/borders.txt"));
-            String line = reader.readLine();
-            while (line != null) {
-                String[] parts = line.split("->");
-                countries.get(parts[0]).addBorder(countries.get(parts[1]));
-                countries.get(parts[1]).addBorder(countries.get(parts[0]));
-                line = reader.readLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("[Risk Game Agent] Could not load borders");
-        }
     }
 
     public void setup() {
         Object[] args = getArguments();
 
-        if (args == null || continents.isEmpty() || countries.isEmpty()) {
+        riskMap = new RiskMap();
+
+        if (args == null || riskMap.getContinents().isEmpty() || riskMap.getCountries().isEmpty()) {
             doDelete();
             return;
         }
 
         numberPlayers = Integer.parseInt(args[0].toString());
+        players = new ArrayList<AID>(numberPlayers);
 
         addBehaviour(new WaitForPlayers());
     }
 
     class WaitForPlayers extends Behaviour {
-        
+
         public void action() {
-            System.out.println("waiting for " + (((RiskGameAgent) myAgent).numberPlayers - ((RiskGameAgent) myAgent).joinedPlayers) + " more players.");
+            int playersLeft = (((RiskGameAgent) myAgent).numberPlayers - ((RiskGameAgent) myAgent).players.size());
+            System.out.println("waiting for " + playersLeft + " more player" + (playersLeft != 1 ? "s." : '.'));
             ACLMessage msg = receive();
 
-            if(msg != null) {
-                joinedPlayers++;
+            if (msg != null) {
                 System.out.println(msg);
-                // ACLMessage reply = msg.createReply();
-                // reply.setPerformative(ACLMessage.AGREE);
-                // reply.setContent("Added you to the player list.");
-                // send(reply);
+                AID newPlayer = msg.getSender();
+                ACLMessage reply = msg.createReply();
+
+                if (players.contains(newPlayer)) {
+                    reply.setPerformative(ACLMessage.CONFIRM);
+                    reply.setContent("You are already on the player list.");
+                } else {
+                    players.add(newPlayer);
+                    reply.setPerformative(ACLMessage.AGREE);
+                    reply.setContent("Added you to the player list.");
+                }
+                send(reply);
             } else {
                 block();
-            }               
+            }
         }
 
         public boolean done() {
-            return ((RiskGameAgent) myAgent).joinedPlayers == ((RiskGameAgent) myAgent).numberPlayers;
+            return ((RiskGameAgent) myAgent).players.size() == ((RiskGameAgent) myAgent).numberPlayers;
         }
 
         public int onEnd() {
             System.out.println("Got all players, starting game.");
-            //myAgent.addBehaviour(new MapDisplayBehaviour());
+            Collections.shuffle(players);
+            myAgent.addBehaviour(new MapDisplayBehaviour());
+            // myAgent.addBehaviour(new PlayerDeploymentBehaviour());
 
             return 0;
         }
@@ -113,11 +91,23 @@ public class RiskGameAgent extends Agent {
 
     class MapDisplayBehaviour extends Behaviour {
         public void action() {
-            System.out.println(((RiskGameAgent) myAgent).continents);
+            // System.out.println(((RiskGameAgent) myAgent).players);
+            System.out.println(((RiskGameAgent) myAgent).riskMap);
+        }
+
+        public boolean done() {
+            return true;
+        }
+    }
+
+    class PlayerDeploymentBehaviour extends Behaviour {
+        public void action() {
+
         }
 
         public boolean done() {
             return false;
         }
     }
+
 }
