@@ -19,4 +19,11 @@ public abstract class RiskPlayerBehaviour extends Behaviour {
     public boolean done() {
         return true;
     }
+
+    public int onEnd() {
+        myAgent.addBehaviour(new RiskPlayerListener());
+
+        return 0;
+    }
+
 }
