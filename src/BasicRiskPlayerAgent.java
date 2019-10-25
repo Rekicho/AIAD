@@ -11,6 +11,7 @@ import java.util.Map;
 
 public class BasicRiskPlayerAgent extends Agent {
     private AID riskGameAgentAID;
+    protected RiskMap riskMap;
 
     public void setup() {
         Object[] args = getArguments();

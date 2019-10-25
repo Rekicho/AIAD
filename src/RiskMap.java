@@ -4,13 +4,13 @@ import src.Continent;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class RiskMap { // implements java.io.Serializable {
-
-    // private static final long serialVersionUID = 1L;
+public class RiskMap implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private static final HashMap<String, Country> countries;
     private static final HashMap<String, Continent> continents;
