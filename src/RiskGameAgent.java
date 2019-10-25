@@ -13,8 +13,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
-import src.Country;
-import src.Continent;
+import src.*;
 
 public class RiskGameAgent extends Agent {
     private ArrayList<AID> players;
@@ -53,21 +52,21 @@ public class RiskGameAgent extends Agent {
 
         public void action() {
             int playersLeft = (((RiskGameAgent) myAgent).numberPlayers - ((RiskGameAgent) myAgent).players.size());
-            System.out.println("waiting for " + playersLeft + " more player" + (playersLeft != 1 ? "s." : '.'));
+            System.out.println("[RiskGameAgent] Waiting for " + playersLeft + " more player" + (playersLeft != 1 ? "s." : '.'));
             ACLMessage msg = receive();
 
             if (msg != null) {
-                System.out.println(msg);
                 AID newPlayer = msg.getSender();
                 ACLMessage reply = msg.createReply();
 
                 if (players.contains(newPlayer)) {
                     reply.setPerformative(ACLMessage.CONFIRM);
-                    reply.setContent("You are already on the player list.");
+                    reply.setContent("[ALREADY_JOINED]\nYou are already on the player list.");
                 } else {
                     players.add(newPlayer);
+                    System.out.println("[RiskGameAgent] Added " + newPlayer.getLocalName() + "to the player list.");
                     reply.setPerformative(ACLMessage.AGREE);
-                    reply.setContent("Added you to the player list.");
+                    reply.setContent("[ADDED]\nAdded you to the player list.");
                 }
                 send(reply);
             } else {
@@ -80,18 +79,33 @@ public class RiskGameAgent extends Agent {
         }
 
         public int onEnd() {
-            System.out.println("Got all players, starting game.");
+            System.out.println("[RiskGameAgent] Got all players, starting game.");
             Collections.shuffle(players);
-            myAgent.addBehaviour(new MapDisplayBehaviour());
+            myAgent.addBehaviour(new SendMapBehaviour());
+            // myAgent.addBehaviour(new MapDisplayBehaviour());
             // myAgent.addBehaviour(new PlayerDeploymentBehaviour());
 
             return 0;
         }
     }
 
+    class SendMapBehaviour extends Behaviour {
+        public void action() {
+            ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+            msg.setContent("[MAP]\n"+Utils.toString(riskMap));
+            for(int i = 0; i < players.size(); i++)
+                msg.addReceiver(players.get(i));
+            send(msg);
+        }
+
+        public boolean done() {
+            return true;
+        }
+    }
+
     class MapDisplayBehaviour extends Behaviour {
         public void action() {
-            // System.out.println(((RiskGameAgent) myAgent).players);
+            System.out.println(((RiskGameAgent) myAgent).players);
             System.out.println(((RiskGameAgent) myAgent).riskMap);
         }
 

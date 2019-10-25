@@ -3,6 +3,7 @@ import jade.core.AID;
 
 public class BasicRiskPlayerAgent extends Agent {
     private AID riskGameAgentAID;
+    protected RiskMap riskMap;
 
     public void setup() {
         Object[] args = getArguments();
