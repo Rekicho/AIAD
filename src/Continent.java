@@ -3,8 +3,11 @@ package src;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.io.Serializable;
 
-public class Continent {
+public class Continent implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     String name;
     HashMap<String, Country> countries;
 

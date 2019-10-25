@@ -1,51 +1,51 @@
 Alaska->Alberta
-Alaska->Northwest Territory
+Alaska->Northwest_Territory
 Alaska->Kamchatka
-Alberta->Northwest Territory
+Alberta->Northwest_Territory
 Alberta->Ontario
-Alberta->Western United States
-Central America->Eastern United States
-Central America->Western United States
-Central America->Venezuela
-Eastern United States->Ontario
-Eastern United States->Quebec
-Eastern United States->Western United States
-Greenland->Northwest Territory
+Alberta->Western_United_States
+Central_America->Eastern_United_States
+Central_America->Western_United_States
+Central_America->Venezuela
+Eastern_United_States->Ontario
+Eastern_United_States->Quebec
+Eastern_United_States->Western_United_States
+Greenland->Northwest_Territory
 Greenland->Ontario
 Greenland->Quebec
 Greenland->Iceland
-Northwest Territory->Ontario
+Northwest_Territory->Ontario
 Ontario->Quebec
-Ontario->Western United States
-Great Britain->Iceland
-Great Britain->Northern Europe
-Great Britain->Scandinavia
-Great Britain->Western Europe
+Ontario->Western_United_States
+Great_Britain->Iceland
+Great_Britain->Northern_Europe
+Great_Britain->Scandinavia
+Great_Britain->Western_Europe
 Iceland->Scandinavia
-Northern Europe->Scandinavia
-Northern Europe->Southern Europe
-Northern Europe->Ukraine
-Northern Europe->Western Europe
+Northern_Europe->Scandinavia
+Northern_Europe->Southern_Europe
+Northern_Europe->Ukraine
+Northern_Europe->Western_Europe
 Scandinavia->Ukraine
-Southern Europe->Ukraine
-Southern Europe->Western Europe
-Southern Europe->Middle East
-Southern Europe->Egypt
-Southern Europe->North Africa
+Southern_Europe->Ukraine
+Southern_Europe->Western_Europe
+Southern_Europe->Middle_East
+Southern_Europe->Egypt
+Southern_Europe->North_Africa
 Ukraine->Afghanistan
-Ukraine->Middle East
+Ukraine->Middle_East
 Ukraine->Ural
-Western Europe->North Africa
+Western_Europe->North_Africa
 Afghanistan->China
 Afghanistan->India
-Afghanistan->Middle East
+Afghanistan->Middle_East
 Afghanistan->Ural
 China->India
 China->Mongolia
 China->Siam
 China->Siberia
 China->Ural
-India->Middle East
+India->Middle_East
 India->Siam
 Irkutsk->Kamchatka
 Irkutsk->Mongolia
@@ -55,8 +55,8 @@ Japan->Kamchatka
 Japan->Mongolia
 Kamchatka->Mongolia
 Kamchatka->Yakutsk
-Middle East->East Africa
-Middle East->Egypt
+Middle_East->East_Africa
+Middle_East->Egypt
 Mongolia->Siberia
 Siam->Indonesia
 Siberia->Ural
@@ -65,19 +65,19 @@ Argentina->Brazil
 Argentina->Peru
 Brazil->Peru
 Brazil->Venezuela
-Brazil->North Africa
+Brazil->North_Africa
 Peru->Venezuela
-Congo->East Africa
-Congo->North Africa
-Congo->South Africa
-East Africa->Egypt
-East Africa->Madagascar
-East Africa->North Africa
-East Africa->South Africa
-Egypt->North Africa
-Madagascar->South Africa
-Eastern Australia->New Guinea
-Eastern Australia->Western Australia
-Indonesia->New Guinea
-Indonesia->Western Australia
-New Guinea->Western Australia
+Congo->East_Africa
+Congo->North_Africa
+Congo->South_Africa
+East_Africa->Egypt
+East_Africa->Madagascar
+East_Africa->North_Africa
+East_Africa->South_Africa
+Egypt->North_Africa
+Madagascar->South_Africa
+Eastern_Australia->New_Guinea
+Eastern_Australia->Western_Australia
+Indonesia->New_Guinea
+Indonesia->Western_Australia
+New_Guinea->Western_Australia

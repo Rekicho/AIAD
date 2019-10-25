@@ -20,6 +20,8 @@ public class RiskGameAgent extends Agent {
     private int numberPlayers;
     private static final HashMap<Integer, Integer> startingArmies;
     private RiskMap riskMap;
+    private int armiesToPlace;
+    private int placedArmies;
 
     static {
         HashMap<Integer, Integer> startingArmiesMap = new HashMap<Integer, Integer>();
@@ -44,6 +46,7 @@ public class RiskGameAgent extends Agent {
 
         numberPlayers = Integer.parseInt(args[0].toString());
         players = new ArrayList<AID>(numberPlayers);
+        armiesToPlace = numberPlayers * startingArmies.get(numberPlayers);
 
         addBehaviour(new WaitForPlayers());
     }
@@ -85,7 +88,6 @@ public class RiskGameAgent extends Agent {
             myAgent.addBehaviour(new ListenerBehaviour());
             myAgent.addBehaviour(new SendMapBehaviour());
             myAgent.addBehaviour(new PlayerDeploymentBehaviour());
-            // myAgent.addBehaviour(new MapDisplayBehaviour());
 
             return 0;
         }
@@ -99,18 +101,35 @@ public class RiskGameAgent extends Agent {
         }
 
         private void interpretMessage(ACLMessage msg) {
-            String header = msg.getContent().split('\n')[0];
-            String arguments = msg.getContent().split('\n')[1];
+            String header = msg.getContent().split("\n")[0];
+            String arguments = msg.getContent().split("\n")[1];
 
             switch (header) {
-            case "[Placement]":
-                // Verify if it's a valid placement
+            case "[PLACEMENT]":
+                if(!msg.getSender().equals(players.get(placedArmies % numberPlayers))) //Not his turn
+                    return;
 
-                // Place it
+                boolean valid = riskMap.placeIfValid(msg.getSender(),arguments.split(" ")[1]);
 
-                // Notify other players (Forward message)
+                if(!valid) {
+                    ACLMessage reply = msg.createReply();
+                    reply.setPerformative(ACLMessage.REFUSE);
+                    reply.setContent("[PLACE]\n");
+                    send(reply);
+                    return;
+                }
 
-                // Request another placement
+                if(valid) {
+                    placedArmies++;
+                    ACLMessage notify = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
+                    notify.setContent(msg.getContent());
+                    for (int i = 0; i < numberPlayers; i++)
+                        notify.addReceiver(players.get(i));
+                    send(notify);
+                }
+
+                System.out.println(msg.getSender() + " PLACED " + arguments.split(" ")[1]);
+
                 break;
             default:
                 break;
@@ -126,7 +145,7 @@ public class RiskGameAgent extends Agent {
         public void action() {
             ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
             msg.setContent("[MAP]\n" + Utils.toString(riskMap));
-            for (int i = 0; i < players.size(); i++)
+            for (int i = 0; i < numberPlayers; i++)
                 msg.addReceiver(players.get(i));
             send(msg);
         }
@@ -148,14 +167,25 @@ public class RiskGameAgent extends Agent {
     }
 
     class PlayerDeploymentBehaviour extends Behaviour {
+        int sentMessages = 0;
         public void action() {
-            ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-            msg.setContent("[PLACE]\n");
-            msg.addReceiver(players.get(0));
+            if(sentMessages == placedArmies)
+            {
+                ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+                msg.setContent("[PLACE]\n");
+                msg.addReceiver(players.get(sentMessages % numberPlayers));
+                send(msg);
+                sentMessages++;
+            }
         }
 
         public boolean done() {
-            return false;
+            return sentMessages == armiesToPlace;
+        }
+
+        public int onEnd() {
+            myAgent.addBehaviour(new MapDisplayBehaviour());
+            return 0;
         }
     }
 

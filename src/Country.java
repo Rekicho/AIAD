@@ -3,10 +3,13 @@ package src;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.io.Serializable;
 
 import jade.core.AID;
 
-public class Country {
+public class Country implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     String name;
     HashMap<String, Country> borders;
     AID owner;
@@ -34,6 +37,14 @@ public class Country {
 
     public AID getOwner() {
         return this.owner;
+    }
+
+    public void setArmies(int armies) {
+        this.armies = armies;
+    }
+
+    public int getArmies() {
+        return this.armies;
     }
 
     public boolean isEmpty() {

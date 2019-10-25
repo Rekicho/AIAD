@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 
 public class BasicRiskPlayerAgent extends Agent {
     private AID riskGameAgentAID;
@@ -27,67 +28,39 @@ public class BasicRiskPlayerAgent extends Agent {
         }
     }
 
-    // First Stage
-    public ArrayList<Country> unoccupiedCountries() {
-        HashMap<String, Country> countries = null;
-        ArrayList<Country> unoccupiedcountries = null;
+    public ArrayList<Country> myCountries() {
+        ArrayList<Country> countriesOwned = new ArrayList();
 
-        Iterator it = countries.entrySet().iterator();
+        Iterator it = riskMap.getCountries().entrySet().iterator();
 
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
-            if (((Country) pair.getValue()).isEmpty())
-                unoccupiedcountries.add((Country) pair.getValue());
-            it.remove();
-        }
-
-        return unoccupiedcountries;
-    }
-
-    // Second Stage
-    public ArrayList<Country> thisAgentCountries() {
-        HashMap<String, Country> countries = null;
-        ArrayList<Country> countriesOwned = null;
-
-        Iterator it = countries.entrySet().iterator();
-
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
-            if (((Country) pair.getValue()).getOwner().equals(riskGameAgentAID))
+            if (((Country) pair.getValue()).getOwner().equals(getAID()))
                 countriesOwned.add((Country) pair.getValue());
-            it.remove();
         }
 
         return countriesOwned;
     }
 
-    public String placeArmies(int stage) {
-
+    public String placeArmies() {
         ArrayList<Country> countriesToPlace = null;
+        countriesToPlace = riskMap.unoccupiedCountries(); // places one army onto any unoccupied territory
 
-        switch (stage) {
-        case 1: // places one army onto any unoccupied territory
-            countriesToPlace = unoccupiedCountries();
-            break;
-        case 2: // places one additional army onto any territory this player already occupies
-            countriesToPlace = thisAgentCountries();
-        default:
-            break;
-        }
-
+        if(countriesToPlace.size() == 0)
+            countriesToPlace = myCountries(); // places one additional army onto any territory this player already occupies
+        
         // Player doesn't have any country, he lost the game
         // This point needs to be unreachable
-        if (countriesToPlace == null)
+        if (countriesToPlace.size() == 0)
             return "[ERROR]\n";
 
-        // Noob player - Shuffles the list and chooses the first possible country
-        Collections.shuffle(countriesToPlace);
-        Country selectedCountry = countriesToPlace.get(0);
-
+        // Noob player - Chooses random country
+        Random rng = new Random();
+        Country selectedCountry = countriesToPlace.get(rng.nextInt(countriesToPlace.size()));
         // Return message
-        // [Placement]
+        // [PLACEMENT]
         // AID_ID CountryName
-        return "[Placement]\n" + getLocalName() + " " + selectedCountry.getName();
+        return "[PLACEMENT]\n" + getLocalName() + " " + selectedCountry.getName();
     }
 
     // TODO

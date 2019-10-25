@@ -8,16 +8,19 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.ArrayList;
+
+import jade.core.AID;
 
 public class RiskMap implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private static final HashMap<String, Country> countries;
-    private static final HashMap<String, Continent> continents;
+    private final HashMap<String, Country> countries;
+    private final HashMap<String, Continent> continents;
 
-    static {
-        HashMap<String, Continent> continentsMap = new HashMap<String, Continent>();
-        HashMap<String, Country> countriesMap = new HashMap<String, Country>();
+    public RiskMap() {
+        continents = new HashMap<String, Continent>();
+        countries = new HashMap<String, Country>();
 
         try {
             BufferedReader reader = new BufferedReader(new FileReader("res/countries.txt"));
@@ -25,20 +28,17 @@ public class RiskMap implements Serializable {
             while (line != null) {
                 String[] parts = line.split("->");
 
-                if (!continentsMap.containsKey(parts[0]))
-                    continentsMap.put(parts[0], new Continent(parts[0]));
+                if (!continents.containsKey(parts[0]))
+                    continents.put(parts[0], new Continent(parts[0]));
 
-                countriesMap.put(parts[1], new Country(parts[1]));
-                continentsMap.get(parts[0]).addCountry(countriesMap.get(parts[1]));
+                countries.put(parts[1], new Country(parts[1]));
+                continents.get(parts[0]).addCountry(countries.get(parts[1]));
                 line = reader.readLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("[Risk Game Agent] Could not load countries");
         }
-
-        continents = continentsMap;
-        countries = countriesMap;
 
         try {
             BufferedReader reader = new BufferedReader(new FileReader("res/borders.txt"));
@@ -75,5 +75,38 @@ public class RiskMap implements Serializable {
         }
 
         return res;
+    }
+
+    public ArrayList<Country> unoccupiedCountries() {
+        ArrayList<Country> unoccupiedCountries = new ArrayList();
+
+        Iterator it = countries.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            if (((Country) pair.getValue()).isEmpty())
+                unoccupiedCountries.add((Country) pair.getValue());
+        }
+
+        return unoccupiedCountries;
+    }
+
+    public boolean placeIfValid(AID player, String country) {
+        if(unoccupiedCountries().size() != 0) {
+            if(countries.get(country).getOwner() != null)
+                return false;
+
+            countries.get(country).setOwner(player);
+            countries.get(country).setArmies(1);
+
+            return true;
+        }
+
+        if(countries.get(country).getOwner().equals(player)) {
+            countries.get(country).setArmies(countries.get(country).getArmies()+1);
+            return true;
+        }
+
+        return false;
     }
 }

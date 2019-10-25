@@ -1,42 +1,42 @@
-North America->Alaska
-North America->Alberta
-North America->Central America
-North America->Eastern United States
-North America->Greenland
-North America->Northwest Territory
-North America->Ontario
-North America->Quebec
-North America->Western United States
-Europe ->Great Britain
-Europe ->Iceland
-Europe ->Northern Europe
-Europe ->Scandinavia
-Europe ->Southern Europe
-Europe ->Ukraine
-Europe ->Western Europe
+North_America->Alaska
+North_America->Alberta
+North_America->Central_America
+North_America->Eastern_United_States
+North_America->Greenland
+North_America->Northwest_Territory
+North_America->Ontario
+North_America->Quebec
+North_America->Western_United_States
+Europe_->Great_Britain
+Europe_->Iceland
+Europe_->Northern_Europe
+Europe_->Scandinavia
+Europe_->Southern_Europe
+Europe_->Ukraine
+Europe_->Western_Europe
 Asia->Afghanistan
 Asia->China
 Asia->India
 Asia->Irkutsk
 Asia->Japan
 Asia->Kamchatka
-Asia->Middle East
+Asia->Middle_East
 Asia->Mongolia
 Asia->Siam
 Asia->Siberia
 Asia->Ural
 Asia->Yakutsk
-South America->Argentina
-South America->Brazil
-South America->Peru
-South America->Venezuela
+South_America->Argentina
+South_America->Brazil
+South_America->Peru
+South_America->Venezuela
 Africa->Congo
-Africa->East Africa
+Africa->East_Africa
 Africa->Egypt
 Africa->Madagascar
-Africa->North Africa
-Africa->South Africa
-Australia->Eastern Australia
+Africa->North_Africa
+Africa->South_Africa
+Australia->Eastern_Australia
 Australia->Indonesia
-Australia->New Guinea
-Australia->Western Australia
+Australia->New_Guinea
+Australia->Western_Australia
