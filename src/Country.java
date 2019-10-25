@@ -28,6 +28,18 @@ public class Country {
         borders.put(border.getName(), border);
     }
 
+    public void setOwner(AID newOwner) {
+        this.owner = newOwner;
+    }
+
+    public AID getOwner() {
+        return this.owner;
+    }
+
+    public boolean isEmpty() {
+        return armies == 0;
+    }
+
     public int borderCount() {
         return borders.size();
     }
