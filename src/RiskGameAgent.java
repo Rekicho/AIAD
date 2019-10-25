@@ -49,10 +49,10 @@ public class RiskGameAgent extends Agent {
     }
 
     class WaitForPlayers extends Behaviour {
-
         public void action() {
             int playersLeft = (((RiskGameAgent) myAgent).numberPlayers - ((RiskGameAgent) myAgent).players.size());
-            System.out.println("[RiskGameAgent] Waiting for " + playersLeft + " more player" + (playersLeft != 1 ? "s." : '.'));
+            System.out.println(
+                    "[RiskGameAgent] Waiting for " + playersLeft + " more player" + (playersLeft != 1 ? "s." : '.'));
             ACLMessage msg = receive();
 
             if (msg != null) {
@@ -81,19 +81,52 @@ public class RiskGameAgent extends Agent {
         public int onEnd() {
             System.out.println("[RiskGameAgent] Got all players, starting game.");
             Collections.shuffle(players);
+
+            myAgent.addBehaviour(new ListenerBehaviour());
             myAgent.addBehaviour(new SendMapBehaviour());
+            myAgent.addBehaviour(new PlayerDeploymentBehaviour());
             // myAgent.addBehaviour(new MapDisplayBehaviour());
-            // myAgent.addBehaviour(new PlayerDeploymentBehaviour());
 
             return 0;
+        }
+    }
+
+    class ListenerBehaviour extends Behaviour {
+        public void action() {
+            ACLMessage msg = myAgent.receive();
+            if (msg != null)
+                interpretMessage(msg);
+        }
+
+        private void interpretMessage(ACLMessage msg) {
+            String header = msg.getContent().split('\n')[0];
+            String arguments = msg.getContent().split('\n')[1];
+
+            switch (header) {
+            case "[Placement]":
+                // Verify if it's a valid placement
+
+                // Place it
+
+                // Notify other players (Forward message)
+
+                // Request another placement
+                break;
+            default:
+                break;
+            }
+        }
+
+        public boolean done() {
+            return false;
         }
     }
 
     class SendMapBehaviour extends Behaviour {
         public void action() {
             ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-            msg.setContent("[MAP]\n"+Utils.toString(riskMap));
-            for(int i = 0; i < players.size(); i++)
+            msg.setContent("[MAP]\n" + Utils.toString(riskMap));
+            for (int i = 0; i < players.size(); i++)
                 msg.addReceiver(players.get(i));
             send(msg);
         }
@@ -116,7 +149,9 @@ public class RiskGameAgent extends Agent {
 
     class PlayerDeploymentBehaviour extends Behaviour {
         public void action() {
-
+            ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+            msg.setContent("[PLACE]\n");
+            msg.addReceiver(players.get(0));
         }
 
         public boolean done() {

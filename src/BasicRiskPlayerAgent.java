@@ -78,7 +78,7 @@ public class BasicRiskPlayerAgent extends Agent {
         // Player doesn't have any country, he lost the game
         // This point needs to be unreachable
         if (countriesToPlace == null)
-            return "[ERROR]";
+            return "[ERROR]\n";
 
         // Noob player - Shuffles the list and chooses the first possible country
         Collections.shuffle(countriesToPlace);
