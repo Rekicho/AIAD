@@ -15,6 +15,12 @@ import java.util.Map;
 
 import src.*;
 
+enum GamePhase {
+    PLACE,
+    ATTACK,
+    FORTIFY
+}
+
 public class RiskGameAgent extends Agent {
     private ArrayList<AID> players;
     private int numberPlayers;
@@ -22,6 +28,9 @@ public class RiskGameAgent extends Agent {
     private RiskMap riskMap;
     private int armiesToPlace;
     private int placedArmies;
+    private int playing;
+    private GamePhase phase;
+
 
     static {
         HashMap<Integer, Integer> startingArmiesMap = new HashMap<Integer, Integer>();
@@ -191,14 +200,36 @@ public class RiskGameAgent extends Agent {
     }
 
     class GameLoopBehaviour extends Behaviour {
+        int last_playing;
+        GamePhase last_phase;
+
+        GameLoopBehaviour()
+        {
+            playing = 0;
+            phase = GamePhase.ATTACK;
+            last_playing = 0;
+            last_phase = GamePhase.ATTACK;
+            requestPlayerAction(playing,phase);
+        }
+
+        public void requestPlayerAction(int player, GamePhase action)
+        {
+            ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+            msg.setContent("[GAME_PLACE]\n"+ riskMap.calculateArmiesToPlace(players.get(player)));
+            msg.addReceiver(players.get(player));
+            send(msg);
+        }
 
         public void action() {
-
+            if (last_playing != playing || last_phase != phase) {
+                last_playing = playing;
+                last_phase = phase;
+                requestPlayerAction(playing,phase);
+            }
         }
 
         public boolean done() {
             return riskMap.checkGameOver();
-
         }
 
         public int onEnd() {

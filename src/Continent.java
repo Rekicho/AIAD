@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.io.Serializable;
 
+import jade.core.AID;
+
 public class Continent implements Serializable {
     private static final long serialVersionUID = 1L;
     String name;
@@ -22,7 +24,7 @@ public class Continent implements Serializable {
     }
 
     public void setBonus(int bonus) {
-        this->bonus = bonus;
+        this.bonus = bonus;
     }
 
     public String toString() {
@@ -37,5 +39,19 @@ public class Continent implements Serializable {
         }
 
         return res;
+    }
+
+    public int getBonusIfControlled(AID player)
+    {
+        Iterator it = countries.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+
+            if(!((Country) pair.getValue()).getOwner().equals(player))
+                return 0;
+        }
+
+        return bonus;
     }
 }

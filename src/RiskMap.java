@@ -59,7 +59,7 @@ public class RiskMap implements Serializable {
             String line = reader.readLine();
             while (line != null) {
                 String[] parts = line.split("->");
-                countries.get(parts[0]).setBonus(Integer.parseInt(parts[1]));
+                continents.get(parts[0]).setBonus(Integer.parseInt(parts[1]));
                 line = reader.readLine();
             }
         } catch (IOException e) {
@@ -140,5 +140,39 @@ public class RiskMap implements Serializable {
         }
 
         return true;
+    }
+
+    public int controledCountries(AID player)
+    {
+        int res = 0;
+
+        Iterator it = countries.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            if (((Country) pair.getValue()).getOwner().equals(player))
+                res++;
+        }
+
+        return res;
+    }
+
+    public int controledContinentsBonus(AID player)
+    {
+        int res = 0;
+
+        Iterator it = continents.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            res += ((Continent) pair.getValue()).getBonusIfControlled(player);
+        }
+
+        return res;
+    }
+
+    public int calculateArmiesToPlace(AID player)
+    {
+        return ((int) controledCountries(player) / 3) + controledContinentsBonus(player);
     }
 }
