@@ -68,7 +68,7 @@ public class BasicRiskPlayerAgent extends Agent {
     // 2. Attacking
     // 3. Fortifying your position
     public String placeNewArmies(int numberOfArmies) {
-        String armiesPlacement = null;
+        String armiesPlacement = "";
         Random rng = new Random();
         ArrayList<Country> myCountries = myCountries();
 

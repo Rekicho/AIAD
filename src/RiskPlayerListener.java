@@ -11,16 +11,25 @@ public class RiskPlayerListener extends Behaviour {
         System.out.println("[" + myAgent.getLocalName() + "] Got Map");
     }
 
-    public void placeArmies(ACLMessage msg) {
-        String response = ((BasicRiskPlayerAgent)myAgent).placeArmies();
+    public void sendGameAction(ACLMessage msg, String response) {
         ACLMessage reply = msg.createReply();
         reply.setPerformative(ACLMessage.PROPOSE);
         reply.setContent(response);
         myAgent.send(reply);
     }
 
+    public void placeArmies(ACLMessage msg) {
+        String response = ((BasicRiskPlayerAgent)myAgent).placeArmies();
+        sendGameAction(msg, response);
+    }
+
     public void doPlacement(AID player, String country) {
         ((BasicRiskPlayerAgent)myAgent).riskMap.placeIfValid(player,country);
+    }
+
+    public void placeNewArmies(ACLMessage msg, int armies) {
+        String response = ((BasicRiskPlayerAgent)myAgent).placeNewArmies(armies);
+        sendGameAction(msg, response);
     }
 
     public void interpretMessage(ACLMessage msg)
@@ -30,6 +39,8 @@ public class RiskPlayerListener extends Behaviour {
             case "[MAP]": readMap(args[1]);
                 break;
             case "[PLACE]": placeArmies(msg);
+                break;
+            case "[GAME_PLACE]": placeNewArmies(msg,Integer.parseInt(args[1]));
                 break;
             case "[PLACEMENT]": doPlacement(new AID(args[1].split(" ")[0],AID.ISLOCALNAME),args[1].split(" ")[1]);
             default: break;

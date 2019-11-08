@@ -140,6 +140,14 @@ public class RiskGameAgent extends Agent {
                 System.out.println(msg.getSender() + " PLACED " + arguments.split(" ")[1]);
 
                 break;
+            case "[GAME_PLACEMENT]": 
+                if (!msg.getSender().equals(playing) || phase != GamePhase.PLACE) // Not his turn or not correct phase
+                    return;
+
+                //Handle Placement List
+                //Check valid
+                //Update phase
+                break;
             default:
                 break;
             }
