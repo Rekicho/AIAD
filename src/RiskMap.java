@@ -59,7 +59,7 @@ public class RiskMap implements Serializable {
             String line = reader.readLine();
             while (line != null) {
                 String[] parts = line.split("->");
-                countries.get(parts[0]).setBonus(Integer.parseInt(parts[1]));
+                continents.get(parts[0]).setBonus(Integer.parseInt(parts[1]));
                 line = reader.readLine();
             }
         } catch (IOException e) {

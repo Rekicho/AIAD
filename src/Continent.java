@@ -22,7 +22,7 @@ public class Continent implements Serializable {
     }
 
     public void setBonus(int bonus) {
-        this->bonus = bonus;
+        this.bonus = bonus;
     }
 
     public String toString() {
