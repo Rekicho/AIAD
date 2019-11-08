@@ -1,11 +1,11 @@
 package src;
 
+import jade.core.AID;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.io.Serializable;
 
-import jade.core.AID;
 
 public class Country implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -55,6 +55,11 @@ public class Country implements Serializable {
         return borders.size();
     }
 
+    public HashMap<String, Country> getBorders() {
+        return borders;
+    }
+
+    @Override
     public String toString() {
         String res = name + " (";
 

@@ -1,14 +1,14 @@
-import jade.core.Agent;
 import jade.core.AID;
-
-import src.Country;
-
+import jade.core.Agent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
+import src.Country;
+
+
 
 public class BasicRiskPlayerAgent extends Agent {
     private AID riskGameAgentAID;
@@ -29,7 +29,7 @@ public class BasicRiskPlayerAgent extends Agent {
     }
 
     public ArrayList<Country> myCountries() {
-        ArrayList<Country> countriesOwned = new ArrayList();
+        ArrayList<Country> countriesOwned = new ArrayList<Country>();
 
         Iterator it = riskMap.getCountries().entrySet().iterator();
 
@@ -67,5 +67,33 @@ public class BasicRiskPlayerAgent extends Agent {
     // 1. Getting and placing new armies
     // 2. Attacking
     // 3. Fortifying your position
+    public String placeNewArmies(int numberOfArmies) {
+        String armiesPlacement = null;
+        Random rng = new Random();
+        ArrayList<Country> myCountries = myCountries();
 
+        for (int i = 0; i < numberOfArmies; i++) {
+            // Choose randomnly
+            armiesPlacement += myCountries.get(rng.nextInt(myCountries.size())).getName() + ',';
+        }
+
+        return "[GAME_PLACEMENT]\n" + getLocalName() + " " + armiesPlacement;
+    }
+
+    public String attackPlayer() {
+        ArrayList<Country> possibleCountriesToAttack = new ArrayList<Country>();
+
+        for(Country country : myCountries()) {
+            Iterator it = country.getBorders().entrySet().iterator();
+
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry) it.next();
+                if (!((Country) pair.getValue()).getOwner().equals(this.AID)) 
+                    possibleCountriesToAttack.add((Country) pair.getValue());
+                it.remove();
+            }
+        }
+
+        
+    }
 }
