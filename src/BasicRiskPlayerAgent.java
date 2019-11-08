@@ -74,7 +74,7 @@ public class BasicRiskPlayerAgent extends Agent {
 
         for (int i = 0; i < numberOfArmies; i++) {
             // Choose randomnly
-            armiesPlacement += myCountries.get(rng.nextInt(myCountries.size())).getName() + ',';
+            armiesPlacement += myCountries.get(rng.nextInt(myCountries.size())).getName() + (i == numberOfArmies - 1 ? "" : ',');
         }
 
         return "[GAME_PLACEMENT]\n" + getLocalName() + " " + armiesPlacement;
@@ -94,6 +94,6 @@ public class BasicRiskPlayerAgent extends Agent {
             }
         }
 
-        
+
     }
 }
