@@ -53,6 +53,19 @@ public class RiskMap implements Serializable {
             e.printStackTrace();
             System.err.println("[Risk Game Agent] Could not load borders");
         }
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("res/bonus.txt"));
+            String line = reader.readLine();
+            while (line != null) {
+                String[] parts = line.split("->");
+                countries.get(parts[0]).setBonus(Integer.parseInt(parts[1]));
+                line = reader.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("[Risk Game Agent] Could not load bonus");
+        }
     }
 
     public HashMap<String, Continent> getContinents() {

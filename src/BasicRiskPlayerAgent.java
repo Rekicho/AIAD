@@ -57,9 +57,7 @@ public class BasicRiskPlayerAgent extends Agent {
         // Noob player - Chooses random country
         Random rng = new Random();
         Country selectedCountry = countriesToPlace.get(rng.nextInt(countriesToPlace.size()));
-        // Return message
-        // [PLACEMENT]
-        // AID_ID CountryName
+
         return "[PLACEMENT]\n" + getLocalName() + " " + selectedCountry.getName();
     }
 

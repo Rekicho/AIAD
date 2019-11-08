@@ -7,21 +7,26 @@ import java.io.Serializable;
 
 public class Continent implements Serializable {
     private static final long serialVersionUID = 1L;
-    
     String name;
     HashMap<String, Country> countries;
+    int bonus;
 
     public Continent(String name) {
         this.name = name;
         countries = new HashMap<String, Country>();
+        bonus = 0;
     }
 
     public void addCountry(Country country) {
         countries.put(country.name, country);
     }
 
+    public void setBonus(int bonus) {
+        this->bonus = bonus;
+    }
+
     public String toString() {
-        String res = name + ":";
+        String res = name + "[" + bonus + "]:";
 
         Iterator it = countries.entrySet().iterator();
 
