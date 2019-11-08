@@ -68,7 +68,7 @@ public class BasicRiskPlayerAgent extends Agent {
     // 2. Attacking
     // 3. Fortifying your position
     public String placeNewArmies(int numberOfArmies) {
-        String armiesPlacement = null;
+        String armiesPlacement = "";
         Random rng = new Random();
         ArrayList<Country> myCountries = myCountries();
 
@@ -88,12 +88,12 @@ public class BasicRiskPlayerAgent extends Agent {
 
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry) it.next();
-                if (!((Country) pair.getValue()).getOwner().equals(this.AID)) 
+                if (!((Country) pair.getValue()).getOwner().equals(getAID())) 
                     possibleCountriesToAttack.add((Country) pair.getValue());
                 it.remove();
             }
         }
 
-
+        return "";
     }
 }
