@@ -105,8 +105,8 @@ public class RiskMap implements Serializable {
     }
 
     public boolean placeIfValid(AID player, String country) {
-        if(unoccupiedCountries().size() != 0) {
-            if(countries.get(country).getOwner() != null)
+        if (unoccupiedCountries().size() != 0) {
+            if (countries.get(country).getOwner() != null)
                 return false;
 
             countries.get(country).setOwner(player);
@@ -115,11 +115,30 @@ public class RiskMap implements Serializable {
             return true;
         }
 
-        if(countries.get(country).getOwner().equals(player)) {
-            countries.get(country).setArmies(countries.get(country).getArmies()+1);
+        if (countries.get(country).getOwner().equals(player)) {
+            countries.get(country).setArmies(countries.get(country).getArmies() + 1);
             return true;
         }
 
         return false;
+    }
+
+    public boolean checkGameOver() {
+
+        Iterator it = countries.entrySet().iterator();
+
+        AID player = null;
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            AID owner = ((Country) pair.getValue()).getOwner();
+
+            if (player == null)
+                player = owner;
+            if (!player.equals(owner))
+                return false;
+        }
+
+        return true;
     }
 }
