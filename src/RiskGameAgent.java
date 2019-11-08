@@ -106,12 +106,12 @@ public class RiskGameAgent extends Agent {
 
             switch (header) {
             case "[PLACEMENT]":
-                if(!msg.getSender().equals(players.get(placedArmies % numberPlayers))) //Not his turn
+                if (!msg.getSender().equals(players.get(placedArmies % numberPlayers))) // Not his turn
                     return;
 
-                boolean valid = riskMap.placeIfValid(msg.getSender(),arguments.split(" ")[1]);
+                boolean valid = riskMap.placeIfValid(msg.getSender(), arguments.split(" ")[1]);
 
-                if(!valid) {
+                if (!valid) {
                     ACLMessage reply = msg.createReply();
                     reply.setPerformative(ACLMessage.REFUSE);
                     reply.setContent("[PLACE]\n");
@@ -119,7 +119,7 @@ public class RiskGameAgent extends Agent {
                     return;
                 }
 
-                if(valid) {
+                if (valid) {
                     placedArmies++;
                     ACLMessage notify = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                     notify.setContent(msg.getContent());
@@ -168,9 +168,9 @@ public class RiskGameAgent extends Agent {
 
     class PlayerDeploymentBehaviour extends Behaviour {
         int sentMessages = 0;
+
         public void action() {
-            if(sentMessages == placedArmies)
-            {
+            if (sentMessages == placedArmies) {
                 ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
                 msg.setContent("[PLACE]\n");
                 msg.addReceiver(players.get(sentMessages % numberPlayers));
@@ -184,9 +184,26 @@ public class RiskGameAgent extends Agent {
         }
 
         public int onEnd() {
-            myAgent.addBehaviour(new MapDisplayBehaviour());
+            // myAgent.addBehaviour(new MapDisplayBehaviour());
+            myAgent.addBehaviour(new GameLoopBehaviour());
             return 0;
         }
     }
 
+    class GameLoopBehaviour extends Behaviour {
+
+        public void action() {
+
+        }
+
+        public boolean done() {
+            return riskMap.checkGameOver();
+
+        }
+
+        public int onEnd() {
+            myAgent.addBehaviour(new MapDisplayBehaviour());
+            return 0;
+        }
+    }
 }

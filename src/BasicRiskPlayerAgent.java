@@ -46,9 +46,10 @@ public class BasicRiskPlayerAgent extends Agent {
         ArrayList<Country> countriesToPlace = null;
         countriesToPlace = riskMap.unoccupiedCountries(); // places one army onto any unoccupied territory
 
-        if(countriesToPlace.size() == 0)
-            countriesToPlace = myCountries(); // places one additional army onto any territory this player already occupies
-        
+        if (countriesToPlace.size() == 0)
+            countriesToPlace = myCountries(); // places one additional army onto any territory this player already
+                                              // occupies
+
         // Player doesn't have any country, he lost the game
         // This point needs to be unreachable
         if (countriesToPlace.size() == 0)
