@@ -88,12 +88,29 @@ public class BasicRiskPlayerAgent extends Agent {
 
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry) it.next();
-                if (!((Country) pair.getValue()).getOwner().equals(this.AID)) 
-                    possibleCountriesToAttack.add((Country) pair.getValue());
+                Country actual = (Country) pair.getValue();
+                if (!actual.getOwner().equals(this.AID) && actual.getArmies() >= 2) 
+                    possibleCountriesToAttack.add(actual);
                 it.remove();
             }
         }
 
+        // Country to attack
+        Random rng = new Random();
+        Country countryToAttack = possibleCountriesToAttack.get(rng.nextInt(possibleCountriesToAttack.size()));
 
+        // My Country
+        ArrayList<Country> myCountriesToAttack = new ArrayList<Country>();
+        for(Country country : myCountries()) {
+            if(country.getBorders().containsKey(countryToAttack.getName()))
+                myCountriesToAttack.add(country);
+        }
+
+        Country attacker = myCountriesToAttack.get(rng.nextInt(myCountriesToAttack.size()));
+        int armiesToAttack = 0;
+        if(attacker.getArmies() > 3) armiesToAttack = 3;
+        else armiesToAttack = attacker.getArmies();
+
+        return "[GAME_ATTACK]\n" + getLocalName() + " " + attacker.getName() + " vs " + countryToAttack.getName() + " " +  armiesToAttack;
     }
 }
