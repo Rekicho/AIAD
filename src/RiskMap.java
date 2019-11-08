@@ -132,12 +132,11 @@ public class RiskMap implements Serializable {
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
             AID owner = ((Country) pair.getValue()).getOwner();
-            if (owner == null)
+
+            if (player == null)
+                player = owner;
+            if (!player.equals(owner))
                 return false;
-            else {
-                player === null ? player = owner : null;
-                if(player != owner) return false;
-            }
         }
 
         return true;
