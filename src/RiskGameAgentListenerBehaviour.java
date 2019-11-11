@@ -1,7 +1,7 @@
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
-import jade.core.AID;
 
 class RiskGameAgentListenerBehaviour extends Behaviour {
     public void action() {
@@ -65,8 +65,31 @@ class RiskGameAgentListenerBehaviour extends Behaviour {
 
                 System.out.println(msg.getSender() + " GAME_PLACED " + arguments.split(" ")[1]);
 
-                //Only testing placements
                 ((RiskGameAgent)myAgent).phase = GamePhase.ATTACK;
+            }
+            break;
+        case "[ATTACK]":
+            if (!msg.getSender().equals(((RiskGameAgent)myAgent).players.get(((RiskGameAgent)myAgent).playing)) || ((RiskGameAgent)myAgent).phase != GamePhase.ATTACK) // Not his turn or not correct phase
+                return;    
+
+            valid = ((RiskGameAgent)myAgent).riskMap.checkValidAttack(msg.getSender(), arguments);
+
+            if (!valid) {
+                ACLMessage reply = msg.createReply();
+                reply.setPerformative(ACLMessage.REFUSE);
+                msg.setContent("[REQUEST_ATTACK]\n");
+                myAgent.send(reply);
+                return;
+            }
+
+            if (valid) {
+                //Ask defending Agent for armies
+                System.out.println(msg.getSender() + " ATTACK " + arguments);
+                
+                ACLMessage msgToDefender = new ACLMessage(ACLMessage.REQUEST);
+                msgToDefender.setContent("[DEFEND]\n"+ arguments);
+                msgToDefender.addReceiver(((RiskGameAgent)myAgent).riskMap.getCountries().get(arguments[2]).getOwner());
+                myAgent.send(msgToDefender);
             }
             break;
         case "[END_ATTACK]":

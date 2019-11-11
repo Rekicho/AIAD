@@ -1,16 +1,16 @@
-import src.Country;
-import src.Continent;
-
+import jade.core.AID;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.ArrayList;
+import src.Continent;
+import src.Country;
 
-import jade.core.AID;
+
 
 public class RiskMap implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -76,6 +76,7 @@ public class RiskMap implements Serializable {
         return countries;
     }
 
+    @Override
     public String toString() {
         String res = "";
 
@@ -188,5 +189,15 @@ public class RiskMap implements Serializable {
     public int calculateArmiesToPlace(AID player)
     {
         return ((int) controledCountries(player) / 3) + controledContinentsBonus(player);
+    }
+
+    public boolean checkValidAttack(AID player, String arguments) {
+        String[] args = arguments.split(" ");
+    
+        return countries.get(args[1]).getOwner().equals(player) &&
+            countries.get(args[1]).getArmies() >= 2 &&
+            countries.get(args[1]).getArmies() >= Integer.parseInt(args[3]) &&
+            !countries.get(args[2]).getOwner().equals(player) &&
+            countries.get(args[1]).getBorders().containsKey(args[2]);
     }
 }
