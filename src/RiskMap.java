@@ -123,6 +123,21 @@ public class RiskMap implements Serializable {
         return false;
     }
 
+    public boolean placeIfValidList(AID player, String placementList) {
+        String[] placements = placementList.split(",");
+
+        for(int i = 0; i < placements.length; i++)
+            if(!placeIfValid(player,placements[i]))
+            {
+                for(int j = 0; j < i; j++)
+                    countries.get(placements[i]).setArmies(countries.get(placements[i]).getArmies() - 1);
+
+                return false;
+            }
+
+        return true;
+    }
+
     public boolean checkGameOver() {
 
         Iterator it = countries.entrySet().iterator();

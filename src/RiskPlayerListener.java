@@ -27,6 +27,10 @@ public class RiskPlayerListener extends Behaviour {
         ((BasicRiskPlayerAgent)myAgent).riskMap.placeIfValid(player,country);
     }
 
+    public void doPlacementList(AID player, String placementList) {
+        ((BasicRiskPlayerAgent)myAgent).riskMap.placeIfValidList(player,placementList);
+    }
+
     public void placeNewArmies(ACLMessage msg, int armies) {
         String response = ((BasicRiskPlayerAgent)myAgent).placeNewArmies(armies);
         sendGameAction(msg, response);
@@ -43,6 +47,7 @@ public class RiskPlayerListener extends Behaviour {
             case "[GAME_PLACE]": placeNewArmies(msg,Integer.parseInt(args[1]));
                 break;
             case "[PLACEMENT]": doPlacement(new AID(args[1].split(" ")[0],AID.ISLOCALNAME),args[1].split(" ")[1]);
+            case "[GAME_PLACEMENT]": doPlacementList(new AID(args[1].split(" ")[0],AID.ISLOCALNAME),args[1].split(" ")[1]);
             default: break;
         }
     } 

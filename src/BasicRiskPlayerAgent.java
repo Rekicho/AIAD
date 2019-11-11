@@ -89,7 +89,7 @@ public class BasicRiskPlayerAgent extends Agent {
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry) it.next();
                 Country actual = (Country) pair.getValue();
-                if (!actual.getOwner().equals(this.AID) && actual.getArmies() >= 2) 
+                if (!actual.getOwner().equals(getAID()) && actual.getArmies() >= 2) 
                     possibleCountriesToAttack.add(actual);
                 it.remove();
             }

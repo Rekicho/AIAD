@@ -22,14 +22,14 @@ enum GamePhase {
 }
 
 public class RiskGameAgent extends Agent {
-    private ArrayList<AID> players;
-    private int numberPlayers;
-    private static final HashMap<Integer, Integer> startingArmies;
-    private RiskMap riskMap;
-    private int armiesToPlace;
-    private int placedArmies;
-    private int playing;
-    private GamePhase phase;
+    protected ArrayList<AID> players;
+    protected int numberPlayers;
+    protected static final HashMap<Integer, Integer> startingArmies;
+    protected RiskMap riskMap;
+    protected int armiesToPlace;
+    protected int placedArmies;
+    protected int playing;
+    protected GamePhase phase;
 
 
     static {
@@ -94,67 +94,21 @@ public class RiskGameAgent extends Agent {
             System.out.println("[RiskGameAgent] Got all players, starting game.");
             Collections.shuffle(players);
 
-            myAgent.addBehaviour(new ListenerBehaviour());
+            myAgent.addBehaviour(new RiskGameAgentListenerBehaviour());
             myAgent.addBehaviour(new SendMapBehaviour());
-            myAgent.addBehaviour(new PlayerDeploymentBehaviour());
 
             return 0;
         }
     }
 
-    class ListenerBehaviour extends Behaviour {
+    class MapDisplayBehaviour extends Behaviour {
         public void action() {
-            ACLMessage msg = myAgent.receive();
-            if (msg != null)
-                interpretMessage(msg);
-        }
-
-        private void interpretMessage(ACLMessage msg) {
-            String header = msg.getContent().split("\n")[0];
-            String arguments = msg.getContent().split("\n")[1];
-
-            switch (header) {
-            case "[PLACEMENT]":
-                if (!msg.getSender().equals(players.get(placedArmies % numberPlayers))) // Not his turn
-                    return;
-
-                boolean valid = riskMap.placeIfValid(msg.getSender(), arguments.split(" ")[1]);
-
-                if (!valid) {
-                    ACLMessage reply = msg.createReply();
-                    reply.setPerformative(ACLMessage.REFUSE);
-                    reply.setContent("[PLACE]\n");
-                    send(reply);
-                    return;
-                }
-
-                if (valid) {
-                    placedArmies++;
-                    ACLMessage notify = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
-                    notify.setContent(msg.getContent());
-                    for (int i = 0; i < numberPlayers; i++)
-                        notify.addReceiver(players.get(i));
-                    send(notify);
-                }
-
-                System.out.println(msg.getSender() + " PLACED " + arguments.split(" ")[1]);
-
-                break;
-            case "[GAME_PLACEMENT]": 
-                if (!msg.getSender().equals(playing) || phase != GamePhase.PLACE) // Not his turn or not correct phase
-                    return;
-
-                //Handle Placement List
-                //Check valid
-                //Update phase
-                break;
-            default:
-                break;
-            }
+            System.out.println(((RiskGameAgent) myAgent).players);
+            System.out.println(((RiskGameAgent) myAgent).riskMap);
         }
 
         public boolean done() {
-            return false;
+            return true;
         }
     }
 
@@ -170,16 +124,10 @@ public class RiskGameAgent extends Agent {
         public boolean done() {
             return true;
         }
-    }
 
-    class MapDisplayBehaviour extends Behaviour {
-        public void action() {
-            System.out.println(((RiskGameAgent) myAgent).players);
-            System.out.println(((RiskGameAgent) myAgent).riskMap);
-        }
-
-        public boolean done() {
-            return true;
+        public int onEnd() {
+            myAgent.addBehaviour(new PlayerDeploymentBehaviour());
+            return 0;
         }
     }
 
@@ -197,11 +145,10 @@ public class RiskGameAgent extends Agent {
         }
 
         public boolean done() {
-            return sentMessages == armiesToPlace;
+            return placedArmies == armiesToPlace;
         }
 
         public int onEnd() {
-            // myAgent.addBehaviour(new MapDisplayBehaviour());
             myAgent.addBehaviour(new GameLoopBehaviour());
             return 0;
         }
@@ -214,9 +161,9 @@ public class RiskGameAgent extends Agent {
         GameLoopBehaviour()
         {
             playing = 0;
-            phase = GamePhase.ATTACK;
+            phase = GamePhase.PLACE;
             last_playing = 0;
-            last_phase = GamePhase.ATTACK;
+            last_phase = GamePhase.PLACE;
             requestPlayerAction(playing,phase);
         }
 
