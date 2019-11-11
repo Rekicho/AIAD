@@ -66,9 +66,12 @@ class RiskGameAgentListenerBehaviour extends Behaviour {
                 System.out.println(msg.getSender() + " GAME_PLACED " + arguments.split(" ")[1]);
 
                 //Only testing placements
-                ((RiskGameAgent)myAgent).playing++;
-                ((RiskGameAgent)myAgent).playing %= ((RiskGameAgent)myAgent).numberPlayers; 
+                ((RiskGameAgent)myAgent).phase = GamePhase.ATTACK;
             }
+            break;
+        case "[END_ATTACK]":
+            System.out.println(msg.getSender() + " END_ATTACK " + arguments);
+            ((RiskGameAgent)myAgent).phase = GamePhase.FORTIFY;
             break;
         default:
             break;

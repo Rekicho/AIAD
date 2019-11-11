@@ -36,6 +36,12 @@ public class RiskPlayerListener extends Behaviour {
         sendGameAction(msg, response);
     }
 
+    public void attack(ACLMessage msg) {
+        String response = ((BasicRiskPlayerAgent)myAgent).attack();
+        System.out.println(response);
+        sendGameAction(msg, response);
+    }
+
     public void interpretMessage(ACLMessage msg)
     {
         String[] args = msg.getContent().split("\n");
@@ -47,7 +53,11 @@ public class RiskPlayerListener extends Behaviour {
             case "[GAME_PLACE]": placeNewArmies(msg,Integer.parseInt(args[1]));
                 break;
             case "[PLACEMENT]": doPlacement(new AID(args[1].split(" ")[0],AID.ISLOCALNAME),args[1].split(" ")[1]);
+                break;
             case "[GAME_PLACEMENT]": doPlacementList(new AID(args[1].split(" ")[0],AID.ISLOCALNAME),args[1].split(" ")[1]);
+                break;
+            case "[REQUEST_ATTACK]": attack(msg);
+                break;
             default: break;
         }
     } 

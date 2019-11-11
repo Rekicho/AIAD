@@ -35,7 +35,6 @@ public class Continent implements Serializable {
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
             res += "\n   - " + ((Country) pair.getValue());
-            it.remove();
         }
 
         return res;

@@ -75,8 +75,6 @@ public class Country implements Serializable {
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
             res += ((Country) pair.getValue()).getName();
-            it.remove();
-
             if (it.hasNext())
                 res += ", ";
         }

@@ -84,7 +84,6 @@ public class RiskMap implements Serializable {
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
             res += ((Continent) pair.getValue()) + "\n";
-            it.remove();
         }
 
         return res;

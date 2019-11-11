@@ -80,7 +80,7 @@ public class BasicRiskPlayerAgent extends Agent {
         return "[GAME_PLACEMENT]\n" + getLocalName() + " " + armiesPlacement;
     }
 
-    public String attackPlayer() {
+    public String attack() {
         ArrayList<Country> possibleCountriesToAttack = new ArrayList<Country>();
 
         for(Country country : myCountries()) {
@@ -89,9 +89,8 @@ public class BasicRiskPlayerAgent extends Agent {
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry) it.next();
                 Country actual = (Country) pair.getValue();
-                if (!actual.getOwner().equals(getAID()) && actual.getArmies() >= 2) 
+                if (!actual.getOwner().equals(getAID()) && actual.getArmies() >= 2)
                     possibleCountriesToAttack.add(actual);
-                it.remove();
             }
         }
 
@@ -101,16 +100,15 @@ public class BasicRiskPlayerAgent extends Agent {
 
         // My Country
         ArrayList<Country> myCountriesToAttack = new ArrayList<Country>();
-        for(Country country : myCountries()) {
+        for(Country country : myCountries())
             if(country.getBorders().containsKey(countryToAttack.getName()))
                 myCountriesToAttack.add(country);
-        }
 
         Country attacker = myCountriesToAttack.get(rng.nextInt(myCountriesToAttack.size()));
         int armiesToAttack = 0;
         if(attacker.getArmies() > 3) armiesToAttack = 3;
-        else armiesToAttack = attacker.getArmies();
+        else armiesToAttack = attacker.getArmies() - 1;
 
-        return "[GAME_ATTACK]\n" + getLocalName() + " " + attacker.getName() + " vs " + countryToAttack.getName() + " " +  armiesToAttack;
+        return "[ATTACK]\n" + getLocalName() + " " + attacker.getName() + " " + countryToAttack.getName() + " " +  armiesToAttack;
     }
 }

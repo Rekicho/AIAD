@@ -169,10 +169,27 @@ public class RiskGameAgent extends Agent {
 
         public void requestPlayerAction(int player, GamePhase action)
         {
-            ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-            msg.setContent("[GAME_PLACE]\n"+ riskMap.calculateArmiesToPlace(players.get(player)));
-            msg.addReceiver(players.get(player));
-            send(msg);
+            ACLMessage msg;
+            switch (action) {
+                case PLACE: 
+                msg = new ACLMessage(ACLMessage.REQUEST);
+                msg.setContent("[GAME_PLACE]\n"+ riskMap.calculateArmiesToPlace(players.get(player)));
+                msg.addReceiver(players.get(player));
+                send(msg);
+
+                break;
+
+                case ATTACK:
+                msg = new ACLMessage(ACLMessage.REQUEST);
+                msg.setContent("[REQUEST_ATTACK]\n");
+                msg.addReceiver(players.get(player));
+                send(msg);
+
+                break;
+
+                default: break;
+
+            }
         }
 
         public void action() {
