@@ -111,4 +111,40 @@ public class BasicRiskPlayerAgent extends Agent {
 
         return "[ATTACK]\n" + getLocalName() + " " + attacker.getName() + " " + countryToAttack.getName() + " " +  armiesToAttack;
     }
+
+    public String defend(String attackerTerrName, String defenderTerrName, int attackNumberArmies) {
+        Country defender = null;
+        Country attacker = null;
+
+        for(Country country : myCountries()) {
+            if(country.getName().equals(defenderTerrName)) {
+                defender = country;
+                break;
+            }
+        }
+
+        Iterator it = riskMap.getCountries().entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            if (((Country) pair.getValue()).getName().equals(attackerTerrName)) {
+                attacker = (Country) pair.getValue();
+                break;
+            }
+        }
+
+        if(attacker == null || defender == null) {
+            return "ERROR";
+        }
+
+        int armiesToDefend = 0;
+        if(attacker.getArmies() > 3) armiesToDefend = 3;
+        else if(attacker.getArmies() > attackNumberArmies) armiesToDefend = attackNumberArmies;
+        else armiesToDefend = attacker.getArmies() - 1;
+
+        // Example:
+            // [DEFEND]\n
+            // BasicRiskPlayerAgent1 Portugal 3 Spain 2
+        return "[DEFEND]\n" + getLocalName() + " " + attacker.getName() + " " + attackNumberArmies + " " + defender.getName() + " " + armiesToDefend;
+    }
 }
