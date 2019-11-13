@@ -29,6 +29,9 @@ public class RiskGameAgent extends Agent {
     protected int armiesToPlace;
     protected int placedArmies;
     protected int playing;
+    protected AID defending = null;
+    protected String attackingCountry = null;
+    protected String defendingCountry = null;
     protected GamePhase phase;
 
 

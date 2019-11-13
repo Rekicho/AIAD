@@ -38,14 +38,12 @@ public class RiskPlayerListener extends Behaviour {
 
     public void attack(ACLMessage msg) {
         String response = ((BasicRiskPlayerAgent)myAgent).attack();
-        System.out.println(response);
         sendGameAction(msg, response);
     }
 
     public void defend(ACLMessage msg) {
-        String message = msg.getContent().split('\n')[1].split(" ");
+        String[] message = msg.getContent().split("\n")[1].split(" ");
         String response = ((BasicRiskPlayerAgent)myAgent).defend(message[1], message[2], Integer.parseInt(message[3]));
-        System.out.println(response);
         sendGameAction(msg, response);
     }
 

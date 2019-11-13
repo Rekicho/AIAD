@@ -88,24 +88,22 @@ class RiskGameAgentListenerBehaviour extends Behaviour {
                 
                 ACLMessage msgToDefender = new ACLMessage(ACLMessage.REQUEST);
                 msgToDefender.setContent("[DEFEND]\n"+ arguments);
-                msgToDefender.addReceiver(((RiskGameAgent)myAgent).riskMap.getCountries().get(arguments[2]).getOwner());
+                ((RiskGameAgent)myAgent).defending = ((RiskGameAgent)myAgent).riskMap.getCountries().get(arguments.split(" ")[2]).getOwner();
+                ((RiskGameAgent)myAgent).attackingCountry = arguments.split(" ")[1];
+                ((RiskGameAgent)myAgent).defendingCountry = arguments.split(" ")[2];
+                msgToDefender.addReceiver(((RiskGameAgent)myAgent).defending);
                 myAgent.send(msgToDefender);
             }
             break;
         case "[DEFEND]":
-            if (!msg.getSender().equals(((RiskGameAgent)myAgent).players.get(((RiskGameAgent)myAgent).playing)) || ((RiskGameAgent)myAgent).phase != GamePhase.ATTACK) // Not his turn or not correct phase
+            if (defending == null || !msg.getSender().equals(defending))
                 return;    
 
             String[] args = arguments.split(" ");
-            valid = ((RiskGameAgent)myAgent).riskMap.checkValidAttack(msg.getSender(), new String[] { args[0], args[3], args[1], args[4]});
+            valid = ((RiskGameAgent)myAgent).attackingCountry.equals(arguments.split(" ")[1]) &&
+                    ((RiskGameAgent)myAgent).defendingCountry.equals(arguments.split(" ")[3]);
 
-            if (!valid) {
-                ACLMessage reply = msg.createReply();
-                reply.setPerformative(ACLMessage.REFUSE);
-                msg.setContent("[REQUEST_ATTACK]\n");
-                myAgent.send(reply);
-                return;
-            }
+            if (!valid) return;
 
             if (valid) {
                 // GENERATE ATTACK

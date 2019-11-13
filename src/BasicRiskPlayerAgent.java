@@ -123,10 +123,7 @@ public class BasicRiskPlayerAgent extends Agent {
             armiesToDefend = 2;
         else
             armiesToDefend = 1;
-
-        // Example:
-        // [DEFEND]\n
-        // BasicRiskPlayerAgent1 Portugal 3 Spain 2
+            
         return "[DEFEND]\n" + getLocalName() + " " + attackerTerrName + " " + attackNumberArmies + " "
                 + defenderTerrName + " " + armiesToDefend;
     }
