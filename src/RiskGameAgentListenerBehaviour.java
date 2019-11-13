@@ -96,7 +96,7 @@ class RiskGameAgentListenerBehaviour extends Behaviour {
             }
             break;
         case "[DEFEND]":
-            if (defending == null || !msg.getSender().equals(defending))
+            if (((RiskGameAgent)myAgent).defending == null || !msg.getSender().equals(((RiskGameAgent)myAgent).defending))
                 return;    
 
             String[] args = arguments.split(" ");
@@ -111,7 +111,9 @@ class RiskGameAgentListenerBehaviour extends Behaviour {
                 System.out.println(msg.getSender() + " FIGHT " + arguments);
                 
                 // TODO
-
+                ((RiskGameAgent)myAgent).defending = null;
+                ((RiskGameAgent)myAgent).defendingCountry = null;
+                ((RiskGameAgent)myAgent).attackingCountry = null;
             }
             break;
         case "[END_ATTACK]":
