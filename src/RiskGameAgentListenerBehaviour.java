@@ -70,7 +70,7 @@ class RiskGameAgentListenerBehaviour extends Behaviour {
             break;
         case "[ATTACK]":
             if (!msg.getSender().equals(((RiskGameAgent)myAgent).players.get(((RiskGameAgent)myAgent).playing)) || ((RiskGameAgent)myAgent).phase != GamePhase.ATTACK) // Not his turn or not correct phase
-                return;    
+            return;    
 
             valid = ((RiskGameAgent)myAgent).riskMap.checkValidAttack(msg.getSender(), arguments);
 
@@ -90,6 +90,30 @@ class RiskGameAgentListenerBehaviour extends Behaviour {
                 msgToDefender.setContent("[DEFEND]\n"+ arguments);
                 msgToDefender.addReceiver(((RiskGameAgent)myAgent).riskMap.getCountries().get(arguments[2]).getOwner());
                 myAgent.send(msgToDefender);
+            }
+            break;
+        case "[DEFEND]":
+            if (!msg.getSender().equals(((RiskGameAgent)myAgent).players.get(((RiskGameAgent)myAgent).playing)) || ((RiskGameAgent)myAgent).phase != GamePhase.ATTACK) // Not his turn or not correct phase
+                return;    
+
+            String[] args = arguments.split(" ");
+            valid = ((RiskGameAgent)myAgent).riskMap.checkValidAttack(msg.getSender(), new String[] { args[0], args[3], args[1], args[4]});
+
+            if (!valid) {
+                ACLMessage reply = msg.createReply();
+                reply.setPerformative(ACLMessage.REFUSE);
+                msg.setContent("[REQUEST_ATTACK]\n");
+                myAgent.send(reply);
+                return;
+            }
+
+            if (valid) {
+                // GENERATE ATTACK
+                // FIGHT Attacker ArmiesAtt Defender ArmiesDef
+                System.out.println(msg.getSender() + " FIGHT " + arguments);
+                
+                // TODO
+
             }
             break;
         case "[END_ATTACK]":

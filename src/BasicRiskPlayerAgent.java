@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.Random;
 import src.Country;
 
-
-
 public class BasicRiskPlayerAgent extends Agent {
     private AID riskGameAgentAID;
     protected RiskMap riskMap;
@@ -74,7 +72,8 @@ public class BasicRiskPlayerAgent extends Agent {
 
         for (int i = 0; i < numberOfArmies; i++) {
             // Choose randomnly
-            armiesPlacement += myCountries.get(rng.nextInt(myCountries.size())).getName() + (i == numberOfArmies - 1 ? "" : ',');
+            armiesPlacement += myCountries.get(rng.nextInt(myCountries.size())).getName()
+                    + (i == numberOfArmies - 1 ? "" : ',');
         }
 
         return "[GAME_PLACEMENT]\n" + getLocalName() + " " + armiesPlacement;
@@ -83,7 +82,7 @@ public class BasicRiskPlayerAgent extends Agent {
     public String attack() {
         ArrayList<Country> possibleCountriesToAttack = new ArrayList<Country>();
 
-        for(Country country : myCountries()) {
+        for (Country country : myCountries()) {
             Iterator it = country.getBorders().entrySet().iterator();
 
             while (it.hasNext()) {
@@ -100,51 +99,35 @@ public class BasicRiskPlayerAgent extends Agent {
 
         // My Country
         ArrayList<Country> myCountriesToAttack = new ArrayList<Country>();
-        for(Country country : myCountries())
-            if(country.getBorders().containsKey(countryToAttack.getName()))
+        for (Country country : myCountries())
+            if (country.getBorders().containsKey(countryToAttack.getName()))
                 myCountriesToAttack.add(country);
 
         Country attacker = myCountriesToAttack.get(rng.nextInt(myCountriesToAttack.size()));
         int armiesToAttack = 0;
-        if(attacker.getArmies() > 3) armiesToAttack = 3;
-        else armiesToAttack = attacker.getArmies() - 1;
+        if (attacker.getArmies() > 3)
+            armiesToAttack = 3;
+        else
+            armiesToAttack = attacker.getArmies() - 1;
 
-        return "[ATTACK]\n" + getLocalName() + " " + attacker.getName() + " " + countryToAttack.getName() + " " +  armiesToAttack;
+        return "[ATTACK]\n" + getLocalName() + " " + attacker.getName() + " " + countryToAttack.getName() + " "
+                + armiesToAttack;
     }
 
     public String defend(String attackerTerrName, String defenderTerrName, int attackNumberArmies) {
-        Country defender = null;
-        Country attacker = null;
-
-        for(Country country : myCountries()) {
-            if(country.getName().equals(defenderTerrName)) {
-                defender = country;
-                break;
-            }
-        }
-
-        Iterator it = riskMap.getCountries().entrySet().iterator();
-
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
-            if (((Country) pair.getValue()).getName().equals(attackerTerrName)) {
-                attacker = (Country) pair.getValue();
-                break;
-            }
-        }
-
-        if(attacker == null || defender == null) {
-            return "ERROR";
-        }
+        Country defender = riskMap.getCountries().get(defenderTerrName);
+        Country attacker = riskMap.getCountries().get(attackerTerrName);
 
         int armiesToDefend = 0;
-        if(attacker.getArmies() > 3) armiesToDefend = 3;
-        else if(attacker.getArmies() > attackNumberArmies) armiesToDefend = attackNumberArmies;
-        else armiesToDefend = attacker.getArmies() - 1;
+        if (defender.getArmies() >= 2)
+            armiesToDefend = 2;
+        else
+            armiesToDefend = 1;
 
         // Example:
-            // [DEFEND]\n
-            // BasicRiskPlayerAgent1 Portugal 3 Spain 2
-        return "[DEFEND]\n" + getLocalName() + " " + attacker.getName() + " " + attackNumberArmies + " " + defender.getName() + " " + armiesToDefend;
+        // [DEFEND]\n
+        // BasicRiskPlayerAgent1 Portugal 3 Spain 2
+        return "[DEFEND]\n" + getLocalName() + " " + attackerTerrName + " " + attackNumberArmies + " "
+                + defenderTerrName + " " + armiesToDefend;
     }
 }
