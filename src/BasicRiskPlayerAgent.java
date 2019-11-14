@@ -103,8 +103,8 @@ public class BasicRiskPlayerAgent extends Agent {
             if (country.getBorders().containsKey(countryToAttack.getName()))
                 myCountriesToAttack.add(country);
 
-        if(myCountriesToAttack().size() == 0)
-            return "[END_ATTACK]";
+        if(myCountriesToAttack.size() == 0)
+            return "[END_ATTACK]\n";
 
         Country attacker = myCountriesToAttack.get(rng.nextInt(myCountriesToAttack.size()));
         int armiesToAttack = 0;

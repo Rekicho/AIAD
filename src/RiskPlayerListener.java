@@ -69,7 +69,9 @@ public class RiskPlayerListener extends Behaviour {
             case "[REQUEST_ATTACK]": attack(msg);
                 break;
             case "[DEFEND]": defend(msg);
-            case "[FIGHT]": doFightResolve(msg.getContent());
+                break;
+            case "[FIGHT]": doFightResolve(args[1]);
+                break;
             default: break;
         }
     } 
