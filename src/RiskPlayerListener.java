@@ -47,6 +47,11 @@ public class RiskPlayerListener extends Behaviour {
         sendGameAction(msg, response);
     }
 
+    public void doFightResolve(String msg) {
+        String[] args = msg.split(" ");
+        ((BasicRiskPlayerAgent)myAgent).riskMap.fight(args[0],Integer.parseInt(args[1]),Integer.parseInt(args[2]),args[3],Integer.parseInt(args[4]));
+    }
+
     public void interpretMessage(ACLMessage msg)
     {
         String[] args = msg.getContent().split("\n");
@@ -64,6 +69,7 @@ public class RiskPlayerListener extends Behaviour {
             case "[REQUEST_ATTACK]": attack(msg);
                 break;
             case "[DEFEND]": defend(msg);
+            case "[FIGHT]": doFightResolve(msg.getContent());
             default: break;
         }
     } 

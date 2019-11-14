@@ -245,6 +245,22 @@ public class RiskMap implements Serializable {
             attacking.setArmies(attacking.getArmies() - (attackingArmies - lostAttacking));
         }
 
-        return attacking.getName() + " -" + lostAttacking + " " + defending.getName() + " -" + lostDefending;
+        return attacking.getName() + " " + attackingArmies + " -" + lostAttacking + " " + defending.getName() + " -" + lostDefending;
+    }
+
+    public String doFight(String attackingName, int attackingArmies, int lostAttacking, String defendingName, int lostDefending)
+    {
+        Country attacking = countries.get(attackingName);
+        Country defending = countries.get(defendingName);
+
+        attacking.setArmies(attacking.getArmies() + lostAttacking);
+        defending.setArmies(defending.getArmies() + lostDefending);
+
+        if(defending.isEmpty())
+        {
+            defending.setOwner(attacking.getOwner());
+            defending.setArmies(attackingArmies + lostAttacking);
+            attacking.setArmies(attacking.getArmies() - (attackingArmies + lostAttacking));
+        }
     }
 }

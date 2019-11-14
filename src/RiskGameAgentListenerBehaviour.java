@@ -112,10 +112,15 @@ class RiskGameAgentListenerBehaviour extends Behaviour {
 
                 System.out.println("FIGHT " + response);
                 
-                // Send fightresolve 
                 ((RiskGameAgent)myAgent).defending = null;
                 ((RiskGameAgent)myAgent).defendingCountry = null;
                 ((RiskGameAgent)myAgent).attackingCountry = null;
+
+                ACLMessage notify = new ACLMessage(ACLMessage.INFORM);
+                notify.setContent("[FIGHT] " + response);
+                for (int i = 0; i < ((RiskGameAgent)myAgent).numberPlayers; i++)
+                    notify.addReceiver(((RiskGameAgent)myAgent).players.get(i));
+                myAgent.send(notify);
             }
             break;
         case "[END_ATTACK]":
