@@ -106,11 +106,13 @@ class RiskGameAgentListenerBehaviour extends Behaviour {
             if (!valid) return;
 
             if (valid) {
-                // GENERATE ATTACK
-                // FIGHT Attacker ArmiesAtt Defender ArmiesDef
-                System.out.println(msg.getSender() + " FIGHT " + arguments);
+                System.out.println(msg.getSender() + " DEFEND " + arguments);
+
+                String response = ((RiskGameAgent)myAgent).riskMap.resolveAttack(arguments);
+
+                System.out.println("FIGHT " + response);
                 
-                // TODO
+                // Send fightresolve 
                 ((RiskGameAgent)myAgent).defending = null;
                 ((RiskGameAgent)myAgent).defendingCountry = null;
                 ((RiskGameAgent)myAgent).attackingCountry = null;

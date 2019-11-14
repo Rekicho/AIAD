@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
+import java.util.Collections;
+import java.util.Arrays;
 import src.Continent;
 import src.Country;
 
@@ -199,5 +202,49 @@ public class RiskMap implements Serializable {
             countries.get(args[1]).getArmies() >= Integer.parseInt(args[3]) &&
             !countries.get(args[2]).getOwner().equals(player) &&
             countries.get(args[1]).getBorders().containsKey(args[2]);
+    }
+
+    public String resolveAttack(String arguments) {
+        Country attacking = countries.get(arguments.split(" ")[1]);
+        Country defending = countries.get(arguments.split(" ")[3]);
+        int attackingArmies = Integer.parseInt(arguments.split(" ")[2]);
+        int defendingArmies = Integer.parseInt(arguments.split(" ")[4]);
+
+        Integer[] attackingDice = new Integer[attackingArmies];
+        Integer[] defendingDice = new Integer[defendingArmies];
+
+        Random dice = new Random();
+
+        for(int i = 0; i < attackingArmies; i++)
+            attackingDice[i] = dice.nextInt(6)+1;
+
+        for(int i = 0; i < defendingArmies; i++)
+            defendingDice[i] = dice.nextInt(6)+1;
+
+        Arrays.sort(attackingDice, Collections.reverseOrder());
+        Arrays.sort(defendingDice, Collections.reverseOrder());
+
+        int lostAttacking = 0;
+        int lostDefending = 0;
+
+        for(int i = 0; i < Math.min(attackingArmies,defendingArmies); i++)
+        {
+            if(defendingDice[i] >= attackingDice[i])
+                lostAttacking++;
+
+            else lostDefending++;
+        }
+
+        attacking.setArmies(attacking.getArmies() - lostAttacking);
+        defending.setArmies(defending.getArmies() - lostDefending);
+
+        if(defending.isEmpty())
+        {
+            defending.setOwner(attacking.getOwner());
+            defending.setArmies(attackingArmies - lostAttacking);
+            attacking.setArmies(attacking.getArmies() - (attackingArmies - lostAttacking));
+        }
+
+        return attacking.getName() + " -" + lostAttacking + " " + defending.getName() + " -" + lostDefending;
     }
 }
