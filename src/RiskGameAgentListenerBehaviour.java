@@ -12,7 +12,12 @@ class RiskGameAgentListenerBehaviour extends Behaviour {
 
     private void interpretMessage(ACLMessage msg) {
         String header = msg.getContent().split("\n")[0];
-        String arguments = msg.getContent().split("\n")[1];
+
+        String arguments = "";
+        
+        if(msg.getContent().split("\n").length > 1)
+            arguments = msg.getContent().split("\n")[1];
+
         boolean valid;
 
         switch (header) {

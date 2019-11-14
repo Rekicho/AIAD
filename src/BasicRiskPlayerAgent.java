@@ -100,7 +100,7 @@ public class BasicRiskPlayerAgent extends Agent {
         // My Country
         ArrayList<Country> myCountriesToAttack = new ArrayList<Country>();
         for (Country country : myCountries())
-            if (country.getBorders().containsKey(countryToAttack.getName()))
+            if (country.getBorders().containsKey(countryToAttack.getName()) && country.getArmies() >= 2)
                 myCountriesToAttack.add(country);
 
         if(myCountriesToAttack.size() == 0)

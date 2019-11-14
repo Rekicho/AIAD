@@ -16,8 +16,6 @@ public class RiskPlayerListener extends Behaviour {
         reply.setPerformative(ACLMessage.PROPOSE);
         reply.setContent(response);
         myAgent.send(reply);
-        System.out.println(reply.getContent());
-
     }
 
     public void placeArmies(ACLMessage msg) {
@@ -56,7 +54,6 @@ public class RiskPlayerListener extends Behaviour {
 
     public void interpretMessage(ACLMessage msg)
     {
-        System.out.println(msg.getContent());
         String[] args = msg.getContent().split("\n");
         switch(args[0]) {
             case "[MAP]": readMap(args[1]);
