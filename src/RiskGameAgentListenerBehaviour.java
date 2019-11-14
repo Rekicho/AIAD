@@ -51,7 +51,7 @@ class RiskGameAgentListenerBehaviour extends Behaviour {
             if (!valid) {
                 ACLMessage reply = msg.createReply();
                 reply.setPerformative(ACLMessage.REFUSE);
-                msg.setContent("[GAME_PLACE]\n"+ ((RiskGameAgent)myAgent).riskMap.calculateArmiesToPlace(((RiskGameAgent)myAgent).players.get(((RiskGameAgent)myAgent).playing)));
+                reply.setContent("[GAME_PLACE]\n"+ ((RiskGameAgent)myAgent).riskMap.calculateArmiesToPlace(((RiskGameAgent)myAgent).players.get(((RiskGameAgent)myAgent).playing)));
                 myAgent.send(reply);
                 return;
             }
@@ -77,7 +77,7 @@ class RiskGameAgentListenerBehaviour extends Behaviour {
             if (!valid) {
                 ACLMessage reply = msg.createReply();
                 reply.setPerformative(ACLMessage.REFUSE);
-                msg.setContent("[REQUEST_ATTACK]\n");
+                reply.setContent("[REQUEST_ATTACK]\n");
                 myAgent.send(reply);
                 return;
             }
