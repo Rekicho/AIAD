@@ -191,7 +191,7 @@ public class RiskMap implements Serializable {
 
     public int calculateArmiesToPlace(AID player)
     {
-        return ((int) controledCountries(player) / 3) + controledContinentsBonus(player);
+        return (((int) controledCountries(player) / 3) > 3 ? ((int) controledCountries(player) / 3) : 3) + controledContinentsBonus(player);
     }
 
     public boolean checkValidAttack(AID player, String arguments) {

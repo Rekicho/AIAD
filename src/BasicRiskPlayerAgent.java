@@ -92,6 +92,9 @@ public class BasicRiskPlayerAgent extends Agent {
                     possibleCountriesToAttack.add(actual);
             }
         }
+  
+        if(possibleCountriesToAttack.size() == 0)
+            return "[END_ATTACK]\n";
 
         // Country to attack
         Random rng = new Random();
