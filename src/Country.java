@@ -2,6 +2,7 @@ package src;
 
 import jade.core.AID;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -80,6 +81,49 @@ public class Country implements Serializable {
         }
 
         return res + "])";
+    }
+
+    public boolean hasFortifiableBorder() {
+        Iterator it = borders.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            Country value = (Country) pair.getValue();
+            if(value.getOwner().equals(this.owner) && value.getArmies() > 1)
+                return true;
+        }
+
+        return false;
+    }
+
+    public int enemyBordersCount() {
+        int res = 0;
+
+        Iterator it = borders.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+
+            if(!((Country) pair.getValue()).getOwner().equals(this.owner))
+                res++;
+        }
+
+        return res;
+    }
+
+    public ArrayList<Country> getAlliedBorders() {
+        ArrayList<Country> res = new ArrayList<Country>();
+
+        Iterator it = borders.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+
+            if(((Country) pair.getValue()).getOwner().equals(this.owner))
+                res.add((Country) pair.getValue());
+        }
+
+        return res;
     }
 
 }

@@ -16,9 +16,7 @@ import java.util.Map;
 import src.*;
 
 enum GamePhase {
-    PLACE,
-    ATTACK,
-    FORTIFY
+    PLACE, ATTACK, FORTIFY
 }
 
 public class RiskGameAgent extends Agent {
@@ -33,7 +31,6 @@ public class RiskGameAgent extends Agent {
     protected String attackingCountry = null;
     protected String defendingCountry = null;
     protected GamePhase phase;
-
 
     static {
         HashMap<Integer, Integer> startingArmiesMap = new HashMap<Integer, Integer>();
@@ -161,28 +158,26 @@ public class RiskGameAgent extends Agent {
         int last_playing;
         GamePhase last_phase;
 
-        GameLoopBehaviour()
-        {
+        GameLoopBehaviour() {
             playing = 0;
             phase = GamePhase.PLACE;
             last_playing = 0;
             last_phase = GamePhase.PLACE;
-            requestPlayerAction(playing,phase);
+            requestPlayerAction(playing, phase);
         }
 
-        public void requestPlayerAction(int player, GamePhase action)
-        {
+        public void requestPlayerAction(int player, GamePhase action) {
             ACLMessage msg;
             switch (action) {
-                case PLACE: 
+            case PLACE:
                 msg = new ACLMessage(ACLMessage.REQUEST);
-                msg.setContent("[GAME_PLACE]\n"+ riskMap.calculateArmiesToPlace(players.get(player)));
+                msg.setContent("[GAME_PLACE]\n" + riskMap.calculateArmiesToPlace(players.get(player)));
                 msg.addReceiver(players.get(player));
                 send(msg);
 
                 break;
 
-                case ATTACK:
+            case ATTACK:
                 msg = new ACLMessage(ACLMessage.REQUEST);
                 msg.setContent("[REQUEST_ATTACK]\n");
                 msg.addReceiver(players.get(player));
@@ -190,16 +185,23 @@ public class RiskGameAgent extends Agent {
 
                 break;
 
-                default: break;
+            default:
+                break;
 
             }
         }
 
         public void action() {
             if (last_playing != playing || last_phase != phase) {
+                if (!riskMap.stillPlaying(players.get(playing))) {
+                    playing++;
+                    playing %= numberPlayers;
+                    phase = GamePhase.PLACE;
+                }
+
                 last_playing = playing;
                 last_phase = phase;
-                requestPlayerAction(playing,phase);
+                requestPlayerAction(playing, phase);
             }
         }
 

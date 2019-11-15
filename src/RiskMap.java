@@ -4,16 +4,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
-import java.util.Collections;
-import java.util.Arrays;
 import src.Continent;
 import src.Country;
-
-
 
 public class RiskMap implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -129,10 +127,9 @@ public class RiskMap implements Serializable {
     public boolean placeIfValidList(AID player, String placementList) {
         String[] placements = placementList.split(",");
 
-        for(int i = 0; i < placements.length; i++)
-            if(!placeIfValid(player,placements[i]))
-            {
-                for(int j = 0; j < i; j++)
+        for (int i = 0; i < placements.length; i++)
+            if (!placeIfValid(player, placements[i])) {
+                for (int j = 0; j < i; j++)
                     countries.get(placements[i]).setArmies(countries.get(placements[i]).getArmies() - 1);
 
                 return false;
@@ -160,8 +157,7 @@ public class RiskMap implements Serializable {
         return true;
     }
 
-    public int controledCountries(AID player)
-    {
+    public int controledCountries(AID player) {
         int res = 0;
 
         Iterator it = countries.entrySet().iterator();
@@ -175,8 +171,7 @@ public class RiskMap implements Serializable {
         return res;
     }
 
-    public int controledContinentsBonus(AID player)
-    {
+    public int controledContinentsBonus(AID player) {
         int res = 0;
 
         Iterator it = continents.entrySet().iterator();
@@ -189,19 +184,27 @@ public class RiskMap implements Serializable {
         return res;
     }
 
-    public int calculateArmiesToPlace(AID player)
-    {
-        return (((int) controledCountries(player) / 3) > 3 ? ((int) controledCountries(player) / 3) : 3) + controledContinentsBonus(player);
+    public int calculateArmiesToPlace(AID player) {
+        return (((int) controledCountries(player) / 3) > 3 ? ((int) controledCountries(player) / 3) : 3)
+                + controledContinentsBonus(player);
     }
 
     public boolean checkValidAttack(AID player, String arguments) {
         String[] args = arguments.split(" ");
-    
+
+        return countries.get(args[1]).getOwner().equals(player) && countries.get(args[1]).getArmies() >= 2
+                && countries.get(args[1]).getArmies() >= Integer.parseInt(args[3])
+                && !countries.get(args[2]).getOwner().equals(player)
+                && countries.get(args[1]).getBorders().containsKey(args[2]);
+    }
+
+    public boolean checkValidFortify(AID player, String arguments) {
+        String[] args = arguments.split(" ");
+
+        // 0 - localName, 1-helper, 2-selected, 3-armies
         return countries.get(args[1]).getOwner().equals(player) &&
-            countries.get(args[1]).getArmies() >= 2 &&
-            countries.get(args[1]).getArmies() >= Integer.parseInt(args[3]) &&
-            !countries.get(args[2]).getOwner().equals(player) &&
-            countries.get(args[1]).getBorders().containsKey(args[2]);
+                countries.get(args[2]).getOwner().equals(player) &&
+                countries.get(args[1]).getArmies() >= Integer.parseInt(args[3]) + 1;
     }
 
     public String resolveAttack(String arguments) {
@@ -215,11 +218,11 @@ public class RiskMap implements Serializable {
 
         Random dice = new Random();
 
-        for(int i = 0; i < attackingArmies; i++)
-            attackingDice[i] = dice.nextInt(6)+1;
+        for (int i = 0; i < attackingArmies; i++)
+            attackingDice[i] = dice.nextInt(6) + 1;
 
-        for(int i = 0; i < defendingArmies; i++)
-            defendingDice[i] = dice.nextInt(6)+1;
+        for (int i = 0; i < defendingArmies; i++)
+            defendingDice[i] = dice.nextInt(6) + 1;
 
         Arrays.sort(attackingDice, Collections.reverseOrder());
         Arrays.sort(defendingDice, Collections.reverseOrder());
@@ -227,40 +230,54 @@ public class RiskMap implements Serializable {
         int lostAttacking = 0;
         int lostDefending = 0;
 
-        for(int i = 0; i < Math.min(attackingArmies,defendingArmies); i++)
-        {
-            if(defendingDice[i] >= attackingDice[i])
+        for (int i = 0; i < Math.min(attackingArmies, defendingArmies); i++) {
+            if (defendingDice[i] >= attackingDice[i])
                 lostAttacking++;
 
-            else lostDefending++;
+            else
+                lostDefending++;
         }
 
         attacking.setArmies(attacking.getArmies() - lostAttacking);
         defending.setArmies(defending.getArmies() - lostDefending);
 
-        if(defending.isEmpty())
-        {
+        if (defending.isEmpty()) {
             defending.setOwner(attacking.getOwner());
             defending.setArmies(attackingArmies - lostAttacking);
             attacking.setArmies(attacking.getArmies() - (attackingArmies - lostAttacking));
         }
 
-        return attacking.getName() + " " + attackingArmies + " -" + lostAttacking + " " + defending.getName() + " -" + lostDefending;
+        return attacking.getName() + " " + attackingArmies + " -" + lostAttacking + " " + defending.getName() + " -"
+                + lostDefending;
     }
 
-    public void fight(String attackingName, int attackingArmies, int lostAttacking, String defendingName, int lostDefending)
-    {
+    public void fight(String attackingName, int attackingArmies, int lostAttacking, String defendingName,
+            int lostDefending) {
         Country attacking = countries.get(attackingName);
         Country defending = countries.get(defendingName);
 
         attacking.setArmies(attacking.getArmies() + lostAttacking);
         defending.setArmies(defending.getArmies() + lostDefending);
 
-        if(defending.isEmpty())
-        {
+        if (defending.isEmpty()) {
             defending.setOwner(attacking.getOwner());
             defending.setArmies(attackingArmies + lostAttacking);
             attacking.setArmies(attacking.getArmies() - (attackingArmies + lostAttacking));
         }
+    }
+
+    public boolean stillPlaying(AID player) {
+        return controledCountries(player) != 0;
+    }
+
+    public void doFortify(String arguments) {
+        String[] args = arguments.split(" ");
+
+        Country helper = countries.get(args[1]);
+        Country selected = countries.get(args[2]);
+        int armies = Integer.parseInt(args[3]);
+
+        helper.setArmies(helper.getArmies()-armies);
+        selected.setArmies(selected.getArmies()+armies);
     }
 }

@@ -92,8 +92,8 @@ public class BasicRiskPlayerAgent extends Agent {
                     possibleCountriesToAttack.add(actual);
             }
         }
-  
-        if(possibleCountriesToAttack.size() == 0)
+
+        if (possibleCountriesToAttack.size() == 0)
             return "[END_ATTACK]\n";
 
         // Country to attack
@@ -106,7 +106,7 @@ public class BasicRiskPlayerAgent extends Agent {
             if (country.getBorders().containsKey(countryToAttack.getName()) && country.getArmies() >= 2)
                 myCountriesToAttack.add(country);
 
-        if(myCountriesToAttack.size() == 0)
+        if (myCountriesToAttack.size() == 0)
             return "[END_ATTACK]\n";
 
         Country attacker = myCountriesToAttack.get(rng.nextInt(myCountriesToAttack.size()));
@@ -129,8 +129,51 @@ public class BasicRiskPlayerAgent extends Agent {
             armiesToDefend = 2;
         else
             armiesToDefend = 1;
-            
+
         return "[DEFEND]\n" + getLocalName() + " " + attackerTerrName + " " + attackNumberArmies + " "
                 + defenderTerrName + " " + armiesToDefend;
+    }
+
+    public String fortify() {
+
+        ArrayList<Country> connectedCountries = new ArrayList<Country>();
+
+        for (Country country : myCountries()) {
+            if(country.hasFortifiableBorder())
+                connectedCountries.add(country);
+        }
+
+        int maxEnemyBorder = 0;
+        Country selected = null;
+
+        for (Country country : connectedCountries) {
+
+            int countryEnemyBorder = country.enemyBordersCount();
+            
+            if (countryEnemyBorder > maxEnemyBorder) {
+                selected = country;
+                maxEnemyBorder = countryEnemyBorder;
+            }
+        }
+
+        if(selected == null) {
+            return "[FORTIFY]\n" + getLocalName();
+        }
+
+        int maxHelp = 0;
+        Country helper = null;
+
+        for (Country country : selected.getAlliedBorders()) {
+            if(country.getArmies() - 1 > maxHelp) {
+                maxHelp = country.getArmies() - 1;
+                helper = country;
+            }
+        }
+
+        if(helper == null) {
+            return "[FORTIFY]\n" + getLocalName();
+        }
+
+        return "[FORTIFY]\n" + getLocalName() + " " + helper.getName() + " " + selected.getName() + " " + maxHelp;
     }
 }
