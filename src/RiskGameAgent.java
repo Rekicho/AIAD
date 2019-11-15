@@ -110,6 +110,11 @@ public class RiskGameAgent extends Agent {
         public boolean done() {
             return true;
         }
+
+        public int onEnd() {
+            doDelete();
+            return 0;
+        }
     }
 
     class SendMapBehaviour extends Behaviour {
@@ -193,7 +198,7 @@ public class RiskGameAgent extends Agent {
 
         public void action() {
             if (last_playing != playing || last_phase != phase) {
-                if (!riskMap.stillPlaying(players.get(playing))) {
+                while (!riskMap.stillPlaying(players.get(playing))) {
                     playing++;
                     playing %= numberPlayers;
                     phase = GamePhase.PLACE;
@@ -210,6 +215,11 @@ public class RiskGameAgent extends Agent {
         }
 
         public int onEnd() {
+            ACLMessage notify = new ACLMessage(ACLMessage.INFORM);
+            notify.setContent("[GAME_OVER]\n");
+            for (int i = 0; i < numberPlayers; i++)
+                notify.addReceiver(players.get(i));
+            myAgent.send(notify);
             myAgent.addBehaviour(new MapDisplayBehaviour());
             return 0;
         }

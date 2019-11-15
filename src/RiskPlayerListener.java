@@ -97,6 +97,10 @@ public class RiskPlayerListener extends Behaviour {
             break;
         case "[FORTIFY]":
             doFortify(args[1]);
+            break;
+        case "[GAME_OVER]":
+            myAgent.doDelete();
+            break; 
         default:
             break;
         }
