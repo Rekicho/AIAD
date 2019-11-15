@@ -23,7 +23,7 @@ public class Risk {
         basicRiskPlayerArgs[0] = "RiskGame";
         basicRiskPlayerArgs[1] = AID.ISLOCALNAME;
 
-        AgentController basicRiskPlayer1AC = mainContainer.createNewAgent("BasicRiskPlayer1", "BasicRiskPlayerAgent",
+        AgentController basicRiskPlayer1AC = mainContainer.createNewAgent("SmartRiskPlayer1", "SmartRiskPlayerAgent",
                 basicRiskPlayerArgs);
         basicRiskPlayer1AC.start();
 
