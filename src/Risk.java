@@ -9,7 +9,7 @@ public class Risk {
     static {
         rt = jade.core.Runtime.instance();
         profile = new ProfileImpl();
-        profile.setParameter(Profile.GUI, "true");
+        //profile.setParameter(Profile.GUI, "true");
         mainContainer = rt.createMainContainer(profile);
     }
 

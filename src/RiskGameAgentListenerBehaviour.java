@@ -93,7 +93,6 @@ class RiskGameAgentListenerBehaviour extends Behaviour {
             }
 
             if (valid) {
-                // Ask defending Agent for armies
                 System.out.println(msg.getSender() + " ATTACK " + arguments);
 
                 ACLMessage msgToDefender = new ACLMessage(ACLMessage.REQUEST);
@@ -144,7 +143,7 @@ class RiskGameAgentListenerBehaviour extends Behaviour {
         case "[END_ATTACK]":
             System.out.println(msg.getSender() + " END_ATTACK " + arguments);
             ((RiskGameAgent) myAgent).phase = GamePhase.FORTIFY;
-            // Send fortify
+
             ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
             request.setContent("[REQUEST_FORTIFY]\n");
             request.addReceiver(((RiskGameAgent) myAgent).players.get(((RiskGameAgent) myAgent).playing));

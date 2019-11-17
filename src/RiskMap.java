@@ -10,8 +10,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
-import src.Continent;
-import src.Country;
 
 public class RiskMap implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -201,7 +199,6 @@ public class RiskMap implements Serializable {
     public boolean checkValidFortify(AID player, String arguments) {
         String[] args = arguments.split(" ");
 
-        // 0 - localName, 1-helper, 2-selected, 3-armies
         return countries.get(args[1]).getOwner().equals(player) &&
                 countries.get(args[2]).getOwner().equals(player) &&
                 countries.get(args[1]).getArmies() >= Integer.parseInt(args[3]) + 1;

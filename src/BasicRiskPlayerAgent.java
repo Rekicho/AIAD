@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
-import src.Country;
 
 public class BasicRiskPlayerAgent extends Agent {
     private AID riskGameAgentAID;
@@ -55,18 +54,13 @@ public class BasicRiskPlayerAgent extends Agent {
         if (countriesToPlace.size() == 0)
             return "[ERROR]\n";
 
-        // Noob player - Chooses random country
+        // Chooses random country
         Random rng = new Random();
         Country selectedCountry = countriesToPlace.get(rng.nextInt(countriesToPlace.size()));
 
         return "[PLACEMENT]\n" + getLocalName() + " " + selectedCountry.getName();
     }
 
-    // TODO
-    // - Game Play
-    // 1. Getting and placing new armies
-    // 2. Attacking
-    // 3. Fortifying your position
     public String placeNewArmies(int numberOfArmies) {
         String armiesPlacement = "";
         Random rng = new Random();

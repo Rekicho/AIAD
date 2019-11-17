@@ -2,8 +2,6 @@ import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
-import src.Utils;
-
 
 public class RiskPlayerListener extends Behaviour {
     private boolean gameStarted = false;

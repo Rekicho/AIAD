@@ -13,8 +13,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
-import src.*;
-
 enum GamePhase {
     PLACE, ATTACK, FORTIFY
 }

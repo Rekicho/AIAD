@@ -1,5 +1,3 @@
-package src;
-
 import jade.core.AID;
 import java.io.Serializable;
 import java.util.ArrayList;
