@@ -45,9 +45,10 @@ class RiskGameAgentListenerBehaviour extends Behaviour {
                     notify.addReceiver(((RiskGameAgent) myAgent).players.get(i));
                 myAgent.send(notify);
 
-                System.out.println(msg.getSender() + " PLACED " + arguments.split(" ")[1]);
+                ((RiskGameAgent) myAgent).addLoggerInformation(LoggerInformation.INITIAL_PLACE, msg.getSender(),
+                        arguments.split(" "));
+                // System.out.println(msg.getSender() + " PLACED " + arguments.split(" ")[1]);
             }
-
             break;
         case "[GAME_PLACEMENT]":
             if (!msg.getSender().equals(((RiskGameAgent) myAgent).players.get(((RiskGameAgent) myAgent).playing))
@@ -72,7 +73,10 @@ class RiskGameAgentListenerBehaviour extends Behaviour {
                     notify.addReceiver(((RiskGameAgent) myAgent).players.get(i));
                 myAgent.send(notify);
 
-                System.out.println(msg.getSender() + " GAME_PLACED " + arguments.split(" ")[1]);
+                ((RiskGameAgent) myAgent).addLoggerInformation(LoggerInformation.ROUND_PLACE, msg.getSender(),
+                        arguments.split(" ")[1].split(","));
+                // System.out.println(msg.getSender() + " GAME_PLACED " + arguments.split("
+                // ")[1]);
 
                 ((RiskGameAgent) myAgent).phase = GamePhase.ATTACK;
             }
@@ -94,8 +98,11 @@ class RiskGameAgentListenerBehaviour extends Behaviour {
 
             if (valid) {
                 // Ask defending Agent for armies
-                System.out.println(msg.getSender() + " ATTACK " + arguments);
+                // System.out.println(msg.getSender() + " ATTACK " + arguments);
+                ((RiskGameAgent) myAgent).addLoggerInformation(LoggerInformation.ROUND_ATTACK, msg.getSender(),
+                        arguments.split(" "));
 
+                ((RiskGameAgent) myAgent).attacking = msg.getSender();
                 ACLMessage msgToDefender = new ACLMessage(ACLMessage.REQUEST);
                 msgToDefender.setContent("[DEFEND]\n" + arguments);
                 ((RiskGameAgent) myAgent).defending = ((RiskGameAgent) myAgent).riskMap.getCountries()
@@ -119,13 +126,17 @@ class RiskGameAgentListenerBehaviour extends Behaviour {
                 return;
 
             if (valid) {
-                System.out.println(msg.getSender() + " DEFEND " + arguments);
-
+                // System.out.println(msg.getSender() + " DEFEND " + arguments);
+                ((RiskGameAgent) myAgent).addLoggerInformation(LoggerInformation.ROUND_DEFEND, msg.getSender(),
+                        ((RiskGameAgent) myAgent).attacking, arguments.split(" "));
                 String response = ((RiskGameAgent) myAgent).riskMap.resolveAttack(arguments);
 
-                System.out.println("FIGHT " + response);
+                // System.out.println("FIGHT " + response);
+                ((RiskGameAgent) myAgent).addLoggerInformation(LoggerInformation.ROUND_FIGHT, msg.getSender(),
+                        ((RiskGameAgent) myAgent).attacking, response.split(" "));
 
                 ((RiskGameAgent) myAgent).defending = null;
+                ((RiskGameAgent) myAgent).attacking = null;
                 ((RiskGameAgent) myAgent).defendingCountry = null;
                 ((RiskGameAgent) myAgent).attackingCountry = null;
 
@@ -142,7 +153,7 @@ class RiskGameAgentListenerBehaviour extends Behaviour {
             }
             break;
         case "[END_ATTACK]":
-            System.out.println(msg.getSender() + " END_ATTACK " + arguments);
+            // System.out.println(msg.getSender() + " END_ATTACK " + arguments);
             ((RiskGameAgent) myAgent).phase = GamePhase.FORTIFY;
             // Send fortify
             ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
@@ -155,13 +166,13 @@ class RiskGameAgentListenerBehaviour extends Behaviour {
             if (!msg.getSender().equals(((RiskGameAgent) myAgent).players.get(((RiskGameAgent) myAgent).playing))
                     || ((RiskGameAgent) myAgent).phase != GamePhase.FORTIFY) // Not his turn or not correct phase
                 return;
-            
+
             if (arguments.split(" ").length == 1) {
-                System.out.println(msg.getSender() + " NO_FORTIFY " + arguments);
+                // System.out.println(msg.getSender() + " NO_FORTIFY " + arguments);
                 ((RiskGameAgent) myAgent).phase = GamePhase.PLACE;
                 ((RiskGameAgent) myAgent).playing++;
                 ((RiskGameAgent) myAgent).playing %= ((RiskGameAgent) myAgent).numberPlayers;
-                System.out.println(((RiskGameAgent) myAgent).riskMap);
+                // System.out.println(((RiskGameAgent) myAgent).riskMap);
                 return;
             }
 
@@ -175,8 +186,11 @@ class RiskGameAgentListenerBehaviour extends Behaviour {
                 return;
             }
 
-            if(valid) {
-                System.out.println(msg.getSender() + " FORTIFY " + arguments);
+            if (valid) {
+                // System.out.println(msg.getSender() + " FORTIFY " + arguments);
+                ((RiskGameAgent) myAgent).addLoggerInformation(LoggerInformation.ROUND_FORTIFY, msg.getSender(),
+                        arguments.split(" "));
+
                 ((RiskGameAgent) myAgent).riskMap.doFortify(arguments);
 
                 ACLMessage notify = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
@@ -185,11 +199,11 @@ class RiskGameAgentListenerBehaviour extends Behaviour {
                     notify.addReceiver(((RiskGameAgent) myAgent).players.get(i));
                 myAgent.send(notify);
             }
-            
+
             ((RiskGameAgent) myAgent).phase = GamePhase.PLACE;
             ((RiskGameAgent) myAgent).playing++;
             ((RiskGameAgent) myAgent).playing %= ((RiskGameAgent) myAgent).numberPlayers;
-            System.out.println(((RiskGameAgent) myAgent).riskMap);
+            // System.out.println(((RiskGameAgent) myAgent).riskMap);
             break;
         default:
             break;
