@@ -280,4 +280,48 @@ public class RiskMap implements Serializable {
         helper.setArmies(helper.getArmies()-armies);
         selected.setArmies(selected.getArmies()+armies);
     }
+
+    public ArrayList<AID> possibleAlliances(AID player) {
+        ArrayList<AID> possibleAlliances = new ArrayList<AID>();
+
+        Iterator it = countries.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            if (!((Country) pair.getValue()).getOwner().equals(player))
+                possibleAlliances.add(((Country) pair.getValue()).getOwner());
+        }
+
+        it = countries.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+
+            if(!((Country) pair.getValue()).getOwner().equals(player))
+                continue;
+
+            Iterator ti = ((Country) pair.getValue()).getBorders().entrySet().iterator();
+
+            while(it.hasNext()) {
+                Map.Entry pairpair = (Map.Entry) it.next();
+                Country country = (Country) pairpair.getValue();
+                if (country.getOwner().equals(player))
+                    possibleAlliances.remove(country.getOwner());
+            }
+        }
+
+        return possibleAlliances;
+    }
+
+    public boolean checkAllianceWin(AID player1, AID player2) {
+        Iterator it = countries.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            if (!((Country) pair.getValue()).getOwner().equals(player1) && !((Country) pair.getValue()).getOwner().equals(player2))
+                return false;
+        }
+
+        return true;
+    }
 }

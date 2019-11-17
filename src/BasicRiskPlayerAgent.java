@@ -1,5 +1,6 @@
 import jade.core.AID;
 import jade.core.Agent;
+import jade.lang.acl.ACLMessage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import src.Country;
 
 public class BasicRiskPlayerAgent extends Agent {
     private AID riskGameAgentAID;
+    private AID allyAID = null;
     protected RiskMap riskMap;
 
     public void setup() {
@@ -79,7 +81,55 @@ public class BasicRiskPlayerAgent extends Agent {
         return "[GAME_PLACEMENT]\n" + getLocalName() + " " + armiesPlacement;
     }
 
+    public void requestAlliance() {
+        ArrayList<AID> possibleAlliances = riskMap.possibleAlliances(getAID());
+
+        if(possibleAlliances.size() <= 1)
+            return;
+
+        Random rng = new Random();
+        allyAID = possibleAlliances.get(rng.nextInt(possibleAlliances.size()));
+
+        System.out.println(getAID() + ": [REQUEST_ALLIANCE] " + getAID() + " " + allyAID);
+        ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
+        msg.setContent("[REQUEST_ALLIANCE]\n");
+        msg.addReceiver(allyAID);
+        send(msg);
+    }
+
+    public boolean analyseAlliance(AID possibleAlly) {
+        if(allyAID == null || allyAID.equals(possibleAlly)) {
+            allyAID = possibleAlly;
+            System.out.println(getAID() + ": [ALLIANCE] " + getAID() + " " + allyAID);
+            return true;
+        }
+
+        return false;
+    }
+
+    public void terminateAlliance() {
+        System.out.println(getAID() + ": [END_ALLIANCE] " + getAID() + " " + allyAID);
+        ACLMessage msg = new ACLMessage(ACLMessage.CANCEL);
+        msg.setContent("[TERMINATE_ALLIANCE]\n");
+        msg.addReceiver(allyAID);
+        send(msg);
+        allyAID = null;
+    }
+
+    public void rejectAlliance() {
+        System.out.println(getAID() + ": [END_ALLIANCE] " + getAID() + " " + allyAID);
+        allyAID = null;
+    }
+
     public String attack() {
+        if(allyAID == null)
+            requestAlliance();
+
+        else System.out.println(getAID() + ": Ally: " + allyAID);
+
+        if(allyAID != null && riskMap.checkAllianceWin(getAID(),allyAID))
+            terminateAlliance();
+
         ArrayList<Country> possibleCountriesToAttack = new ArrayList<Country>();
 
         for (Country country : myCountries()) {
@@ -88,7 +138,7 @@ public class BasicRiskPlayerAgent extends Agent {
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry) it.next();
                 Country actual = (Country) pair.getValue();
-                if (!actual.getOwner().equals(getAID()))
+                if (!actual.getOwner().equals(getAID()) && !actual.getOwner().equals(allyAID))
                     possibleCountriesToAttack.add(actual);
             }
         }
@@ -123,6 +173,9 @@ public class BasicRiskPlayerAgent extends Agent {
     public String defend(String attackerTerrName, String defenderTerrName, int attackNumberArmies) {
         Country defender = riskMap.getCountries().get(defenderTerrName);
         Country attacker = riskMap.getCountries().get(attackerTerrName);
+
+        if(attacker.getOwner().equals(allyAID))
+            terminateAlliance();
 
         int armiesToDefend = 0;
         if (defender.getArmies() >= 2)

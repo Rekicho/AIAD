@@ -65,6 +65,26 @@ public class RiskPlayerListener extends Behaviour {
         ((BasicRiskPlayerAgent) myAgent).riskMap.doFortify(args);
     }
 
+    public void requestAlliance(ACLMessage msg) {
+        ACLMessage reply = msg.createReply();
+
+        if(((BasicRiskPlayerAgent) myAgent).analyseAlliance(msg.getSender())) {
+            reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+            reply.setContent("[ACCEPT_ALLIANCE]\n");
+        }
+
+        else {
+            reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
+            reply.setContent("[REJECT_ALLIANCE]\n");
+        }
+
+        myAgent.send(reply);
+    }
+
+    public void rejectAlliance() {
+        ((BasicRiskPlayerAgent) myAgent).rejectAlliance();
+    }
+
     public void interpretMessage(ACLMessage msg) {
         String[] args = msg.getContent().split("\n");
         switch (args[0]) {
@@ -101,6 +121,17 @@ public class RiskPlayerListener extends Behaviour {
         case "[GAME_OVER]":
             myAgent.doDelete();
             break; 
+        case "[REQUEST_ALLIANCE]":
+            requestAlliance(msg);
+            break;
+        case "[ACCEPT_ALLIANCE]":
+            break;
+        case "[REJECT_ALLIANCE]":
+            rejectAlliance();
+            break;
+        case "[TERMINATE_ALLIANCE]":
+            rejectAlliance();
+            break;
         default:
             break;
         }
