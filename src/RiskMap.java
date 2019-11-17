@@ -10,8 +10,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
-import src.Continent;
-import src.Country;
 
 public class RiskMap implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -201,7 +199,6 @@ public class RiskMap implements Serializable {
     public boolean checkValidFortify(AID player, String arguments) {
         String[] args = arguments.split(" ");
 
-        // 0 - localName, 1-helper, 2-selected, 3-armies
         return countries.get(args[1]).getOwner().equals(player) &&
                 countries.get(args[2]).getOwner().equals(player) &&
                 countries.get(args[1]).getArmies() >= Integer.parseInt(args[3]) + 1;
@@ -279,5 +276,49 @@ public class RiskMap implements Serializable {
 
         helper.setArmies(helper.getArmies()-armies);
         selected.setArmies(selected.getArmies()+armies);
+    }
+
+    public ArrayList<AID> possibleAlliances(AID player) {
+        ArrayList<AID> possibleAlliances = new ArrayList<AID>();
+
+        Iterator it = countries.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            if (!((Country) pair.getValue()).getOwner().equals(player))
+                possibleAlliances.add(((Country) pair.getValue()).getOwner());
+        }
+
+        it = countries.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+
+            if(!((Country) pair.getValue()).getOwner().equals(player))
+                continue;
+
+            Iterator ti = ((Country) pair.getValue()).getBorders().entrySet().iterator();
+
+            while(it.hasNext()) {
+                Map.Entry pairpair = (Map.Entry) it.next();
+                Country country = (Country) pairpair.getValue();
+                if (country.getOwner().equals(player))
+                    possibleAlliances.remove(country.getOwner());
+            }
+        }
+
+        return possibleAlliances;
+    }
+
+    public boolean checkAllianceWin(AID player1, AID player2) {
+        Iterator it = countries.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            if (!((Country) pair.getValue()).getOwner().equals(player1) && !((Country) pair.getValue()).getOwner().equals(player2))
+                return false;
+        }
+
+        return true;
     }
 }

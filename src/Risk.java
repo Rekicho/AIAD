@@ -9,7 +9,7 @@ public class Risk {
     static {
         rt = jade.core.Runtime.instance();
         profile = new ProfileImpl();
-        profile.setParameter(Profile.GUI, "true");
+        //profile.setParameter(Profile.GUI, "true");
         mainContainer = rt.createMainContainer(profile);
     }
 
@@ -23,7 +23,7 @@ public class Risk {
         basicRiskPlayerArgs[0] = "RiskGame";
         basicRiskPlayerArgs[1] = AID.ISLOCALNAME;
 
-        AgentController basicRiskPlayer1AC = mainContainer.createNewAgent("SmartRiskPlayer1", "SmartRiskPlayerAgent",
+        AgentController basicRiskPlayer1AC = mainContainer.createNewAgent("BasicRiskPlayer1", "BasicRiskPlayerAgent",
                 basicRiskPlayerArgs);
         basicRiskPlayer1AC.start();
 

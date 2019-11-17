@@ -6,34 +6,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
-import src.Country;
 
 public class SmartRiskPlayerAgent extends BasicRiskPlayerAgent {
-    //public String placeNewArmies(int numberOfArmies) {
-    //     String armiesPlacement = "";
-    //     Random rng = new Random();
-    //     ArrayList<Country> myCountries = myCountries();
-
-    //     Country bestPlacement = null;
-    //     int maxBorders = 0;
-
-    //     for(Country country : myCountries())
-    //         if(country.enemyBordersCount() > maxBorders)
-    //             bestPlacement = country;
-
-
-    //     for (int i = 0; i < numberOfArmies; i++) {
-    //         // Choose randomnly
-    //         if(bestPlacement != null)
-    //             armiesPlacement += bestPlacement.getName() + (i == numberOfArmies - 1 ? "" : ',');
-
-    //         else armiesPlacement += myCountries.get(rng.nextInt(myCountries.size())).getName()
-    //                     + (i == numberOfArmies - 1 ? "" : ',');
-    //     }
-
-    //     return "[GAME_PLACEMENT]\n" + getLocalName() + " " + armiesPlacement;
-    // }
-
     public String attack() {
         ArrayList<Country> possibleCountriesToAttack = new ArrayList<Country>();
 

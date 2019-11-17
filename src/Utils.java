@@ -1,5 +1,3 @@
-package src;
-
 import java.util.Base64;
 import java.io.Serializable;
 import java.io.ObjectOutputStream;
