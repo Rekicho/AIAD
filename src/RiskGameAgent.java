@@ -118,6 +118,7 @@ public class RiskGameAgent extends Agent {
         public void action() {
             System.out.println(((RiskGameAgent) myAgent).players);
             System.out.println(((RiskGameAgent) myAgent).riskMap);
+            System.out.println("GAME FINISHED!");
         }
 
         public boolean done() {
@@ -239,8 +240,7 @@ public class RiskGameAgent extends Agent {
             for (int i = 0; i < numberPlayers; i++)
                 notify.addReceiver(players.get(i));
             myAgent.send(notify);
-            // myAgent.addBehaviour(new MapDisplayBehaviour());
-            System.out.println("GAME FINISHED!");
+            myAgent.addBehaviour(new MapDisplayBehaviour());
             return 0;
         }
     }
