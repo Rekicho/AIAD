@@ -218,7 +218,7 @@ public class Logger {
     if (!rounds.containsKey(round))
       rounds.put(round, new Round());
 
-    System.out.println(round + " " + localName + " " + phase + " " + move);
+    // System.out.println(round + " " + localName + " " + phase + " " + move);
     switch (phase) {
     case INITIAL_PLACE:
     case ROUND_PLACE:

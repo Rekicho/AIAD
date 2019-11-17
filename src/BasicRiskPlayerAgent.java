@@ -78,13 +78,13 @@ public class BasicRiskPlayerAgent extends Agent {
     public void requestAlliance() {
         ArrayList<AID> possibleAlliances = riskMap.possibleAlliances(getAID());
 
-        if(possibleAlliances.size() <= 1)
+        if (possibleAlliances.size() <= 1)
             return;
 
         Random rng = new Random();
         allyAID = possibleAlliances.get(rng.nextInt(possibleAlliances.size()));
 
-        System.out.println(getAID() + ": [REQUEST_ALLIANCE] " + getAID() + " " + allyAID);
+        System.out.println(getAID().getLocalName() + ": [REQUEST_ALLIANCE] " + getAID().getLocalName() + " " + allyAID.getLocalName());
         ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
         msg.setContent("[REQUEST_ALLIANCE]\n");
         msg.addReceiver(allyAID);
@@ -92,9 +92,9 @@ public class BasicRiskPlayerAgent extends Agent {
     }
 
     public boolean analyseAlliance(AID possibleAlly) {
-        if(allyAID == null || allyAID.equals(possibleAlly)) {
+        if (allyAID == null || allyAID.equals(possibleAlly)) {
             allyAID = possibleAlly;
-            System.out.println(getAID() + ": [ALLIANCE] " + getAID() + " " + allyAID);
+            System.out.println(getAID().getLocalName() + ": [ALLIANCE] " + getAID().getLocalName() + " " + allyAID.getLocalName());
             return true;
         }
 
@@ -102,7 +102,7 @@ public class BasicRiskPlayerAgent extends Agent {
     }
 
     public void terminateAlliance() {
-        System.out.println(getAID() + ": [END_ALLIANCE] " + getAID() + " " + allyAID);
+        System.out.println(getAID().getLocalName() + ": [END_ALLIANCE] " + getAID().getLocalName() + " " + allyAID.getLocalName());
         ACLMessage msg = new ACLMessage(ACLMessage.CANCEL);
         msg.setContent("[TERMINATE_ALLIANCE]\n");
         msg.addReceiver(allyAID);
@@ -111,17 +111,18 @@ public class BasicRiskPlayerAgent extends Agent {
     }
 
     public void rejectAlliance() {
-        System.out.println(getAID() + ": [END_ALLIANCE] " + getAID() + " " + allyAID);
+        System.out.println(getAID().getLocalName() + ": [END_ALLIANCE] " + getAID().getLocalName() + " " + allyAID.getLocalName());
         allyAID = null;
     }
 
     public String attack() {
-        if(allyAID == null)
+        if (allyAID == null)
             requestAlliance();
 
-        else System.out.println(getAID() + ": Ally: " + allyAID);
+        else
+            System.out.println(getAID().getLocalName() + ": Ally: " + allyAID.getLocalName());
 
-        if(allyAID != null && riskMap.checkAllianceWin(getAID(),allyAID))
+        if (allyAID != null && riskMap.checkAllianceWin(getAID(), allyAID))
             terminateAlliance();
 
         ArrayList<Country> possibleCountriesToAttack = new ArrayList<Country>();
@@ -168,7 +169,7 @@ public class BasicRiskPlayerAgent extends Agent {
         Country defender = riskMap.getCountries().get(defenderTerrName);
         Country attacker = riskMap.getCountries().get(attackerTerrName);
 
-        if(attacker.getOwner().equals(allyAID))
+        if (attacker.getOwner().equals(allyAID))
             terminateAlliance();
 
         int armiesToDefend = 0;
@@ -186,7 +187,7 @@ public class BasicRiskPlayerAgent extends Agent {
         ArrayList<Country> connectedCountries = new ArrayList<Country>();
 
         for (Country country : myCountries()) {
-            if(country.hasFortifiableBorder())
+            if (country.hasFortifiableBorder())
                 connectedCountries.add(country);
         }
 
@@ -196,14 +197,14 @@ public class BasicRiskPlayerAgent extends Agent {
         for (Country country : connectedCountries) {
 
             int countryEnemyBorder = country.enemyBordersCount();
-            
+
             if (countryEnemyBorder > maxEnemyBorder) {
                 selected = country;
                 maxEnemyBorder = countryEnemyBorder;
             }
         }
 
-        if(selected == null) {
+        if (selected == null) {
             return "[FORTIFY]\n" + getLocalName();
         }
 
@@ -211,13 +212,13 @@ public class BasicRiskPlayerAgent extends Agent {
         Country helper = null;
 
         for (Country country : selected.getAlliedBorders()) {
-            if(country.getArmies() - 1 > maxHelp) {
+            if (country.getArmies() - 1 > maxHelp) {
                 maxHelp = country.getArmies() - 1;
                 helper = country;
             }
         }
 
-        if(helper == null) {
+        if (helper == null) {
             return "[FORTIFY]\n" + getLocalName();
         }
 
