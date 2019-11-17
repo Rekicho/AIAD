@@ -1,14 +1,8 @@
-package src;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import java.io.FileWriter;
 import java.io.IOException;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONString;
 
 public class Logger {
 

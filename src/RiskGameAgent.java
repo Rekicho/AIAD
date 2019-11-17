@@ -11,8 +11,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import src.*;
-import src.Logger.LoggerPhase;
 
 enum GamePhase {
     PLACE, ATTACK, FORTIFY
@@ -263,22 +261,22 @@ public class RiskGameAgent extends Agent {
             break;
         case INITIAL_PLACE:
             // Arguments: playerLocalName SelectedCountryName
-            logger.addRoundMove(round, name, localName, LoggerPhase.INITIAL_PLACE, arguments[1]);
+            logger.addRoundMove(round, name, localName, Logger.LoggerPhase.INITIAL_PLACE, arguments[1]);
             break;
         case ROUND_PLACE:
             for (int i = 0; i < arguments.length; i++) {
-                logger.addRoundMove(round, name, localName, LoggerPhase.ROUND_PLACE, arguments[i]);
+                logger.addRoundMove(round, name, localName, Logger.LoggerPhase.ROUND_PLACE, arguments[i]);
             }
             break;
         case ROUND_ATTACK:
             // Arguments: playerLocalName playerCountryName EnemyCountryName
             // playerCountryArmies
-            logger.addRoundMove(round, name, localName, LoggerPhase.ROUND_ATTACK,
+            logger.addRoundMove(round, name, localName, Logger.LoggerPhase.ROUND_ATTACK,
                     (arguments[1] + ' ' + arguments[2] + ' ' + arguments[3]));
             break;
         case ROUND_FORTIFY:
             // Arguments: playerLocalName CountryName1 CountryName2 ArmiesToFortify
-            logger.addRoundMove(round, name, localName, LoggerPhase.ROUND_FORTIFY,
+            logger.addRoundMove(round, name, localName, Logger.LoggerPhase.ROUND_FORTIFY,
                     arguments[1] + ' ' + arguments[2] + ' ' + arguments[3]);
             break;
         case ROUND_MAP:
@@ -297,13 +295,13 @@ public class RiskGameAgent extends Agent {
         case ROUND_DEFEND:
             // Arguments: playerLocalName AttackerCountryName AttackerCountryArmies
             // DefenderCountryName DefenderCountryArmies
-            logger.addRoundMove(round, name, localName, LoggerPhase.ROUND_DEFEND,
+            logger.addRoundMove(round, name, localName, Logger.LoggerPhase.ROUND_DEFEND,
                     player.getName() + " " + player.getLocalName() + " " + arguments[4]);
             break;
         case ROUND_FIGHT:
             // Arguments: AttackerCountryName AttackerInitialArmies AttackerLosses
             // DefenderCountryName DefenderLosses
-            logger.addRoundMove(round, name, localName, LoggerPhase.ROUND_FIGHT, arguments[2] + ' ' + arguments[4]);
+            logger.addRoundMove(round, name, localName, Logger.LoggerPhase.ROUND_FIGHT, arguments[2] + ' ' + arguments[4]);
             break;
         default:
             break;
