@@ -84,7 +84,7 @@ public class BasicRiskPlayerAgent extends Agent {
         Random rng = new Random();
         allyAID = possibleAlliances.get(rng.nextInt(possibleAlliances.size()));
 
-        System.out.println(getAID().getLocalName() + ": [REQUEST_ALLIANCE] " + getAID().getLocalName() + " " + allyAID.getLocalName());
+        // System.out.println(getAID().getLocalName() + ": [REQUEST_ALLIANCE] " + getAID().getLocalName() + " " + allyAID.getLocalName());
         ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
         msg.setContent("[REQUEST_ALLIANCE]\n");
         msg.addReceiver(allyAID);
@@ -94,7 +94,7 @@ public class BasicRiskPlayerAgent extends Agent {
     public boolean analyseAlliance(AID possibleAlly) {
         if (allyAID == null || allyAID.equals(possibleAlly)) {
             allyAID = possibleAlly;
-            System.out.println(getAID().getLocalName() + ": [ALLIANCE] " + getAID().getLocalName() + " " + allyAID.getLocalName());
+            // System.out.println(getAID().getLocalName() + ": [ALLIANCE] " + getAID().getLocalName() + " " + allyAID.getLocalName());
             return true;
         }
 
@@ -102,7 +102,7 @@ public class BasicRiskPlayerAgent extends Agent {
     }
 
     public void terminateAlliance() {
-        System.out.println(getAID().getLocalName() + ": [END_ALLIANCE] " + getAID().getLocalName() + " " + allyAID.getLocalName());
+        // System.out.println(getAID().getLocalName() + ": [END_ALLIANCE] " + getAID().getLocalName() + " " + allyAID.getLocalName());
         ACLMessage msg = new ACLMessage(ACLMessage.CANCEL);
         msg.setContent("[TERMINATE_ALLIANCE]\n");
         msg.addReceiver(allyAID);
@@ -111,7 +111,7 @@ public class BasicRiskPlayerAgent extends Agent {
     }
 
     public void rejectAlliance() {
-        System.out.println(getAID().getLocalName() + ": [END_ALLIANCE] " + getAID().getLocalName() + " " + allyAID.getLocalName());
+        // System.out.println(getAID().getLocalName() + ": [END_ALLIANCE] " + getAID().getLocalName() + " " + allyAID.getLocalName());
         allyAID = null;
     }
 
@@ -119,8 +119,8 @@ public class BasicRiskPlayerAgent extends Agent {
         if (allyAID == null)
             requestAlliance();
 
-        else
-            System.out.println(getAID().getLocalName() + ": Ally: " + allyAID.getLocalName());
+        // else
+        //     System.out.println(getAID().getLocalName() + ": Ally: " + allyAID.getLocalName());
 
         if (allyAID != null && riskMap.checkAllianceWin(getAID(), allyAID))
             terminateAlliance();
