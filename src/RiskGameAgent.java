@@ -241,6 +241,7 @@ public class RiskGameAgent extends Agent {
                 notify.addReceiver(players.get(i));
             myAgent.send(notify);
             myAgent.addBehaviour(new MapDisplayBehaviour());
+            logger.saveGame();
             return 0;
         }
     }
@@ -301,7 +302,8 @@ public class RiskGameAgent extends Agent {
         case ROUND_FIGHT:
             // Arguments: AttackerCountryName AttackerInitialArmies AttackerLosses
             // DefenderCountryName DefenderLosses
-            logger.addRoundMove(round, name, localName, Logger.LoggerPhase.ROUND_FIGHT, arguments[2] + ' ' + arguments[4]);
+            logger.addRoundMove(round, name, localName, Logger.LoggerPhase.ROUND_FIGHT,
+                    arguments[2] + ' ' + arguments[4]);
             break;
         default:
             break;
