@@ -7,3 +7,5 @@ MTPS-Main-Container.txt
 compile.sh
 win-compile.bat
 .DS_STORE
+
+includes/jackson-core
