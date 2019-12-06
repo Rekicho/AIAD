@@ -1,4 +1,5 @@
 import jade.core.*;
+import jade.core.AID;
 import jade.wrapper.*;
 
 public class Risk {
@@ -9,13 +10,26 @@ public class Risk {
     static {
         rt = jade.core.Runtime.instance();
         profile = new ProfileImpl();
-        //profile.setParameter(Profile.GUI, "true");
+        // profile.setParameter(Profile.GUI, "true");
         mainContainer = rt.createMainContainer(profile);
     }
 
     public static void main(String[] args) throws StaleProxyException {
+
+        if (args.length < 2 || args.length > 6) {
+            System.out.println("Usage: java Risk <basic||smart>(2,6)");
+            System.exit(-1);
+        } else {
+            for(String s : args) {
+                if (!(s.equals("smart") || s.equals("basic"))) {
+                    System.out.println("Invalid " + s + "\nUsage: java Risk <basic||smart>(2,6)");
+                    System.exit(-1);
+                }
+            }
+        }
+
         Object[] riskAgentArgs = new Object[1];
-        riskAgentArgs[0] = 4;
+        riskAgentArgs[0] = args.length;
         AgentController riskGameAC = mainContainer.createNewAgent("RiskGame", "RiskGameAgent", riskAgentArgs);
         riskGameAC.start();
 
@@ -23,20 +37,21 @@ public class Risk {
         basicRiskPlayerArgs[0] = "RiskGame";
         basicRiskPlayerArgs[1] = AID.ISLOCALNAME;
 
-        AgentController basicRiskPlayer1AC = mainContainer.createNewAgent("BasicRiskPlayer1", "BasicRiskPlayerAgent",
-                basicRiskPlayerArgs);
-        basicRiskPlayer1AC.start();
+        int i = 0;
+        String agentName;
 
-        AgentController basicRiskPlayer2AC = mainContainer.createNewAgent("BasicRiskPlayer2", "BasicRiskPlayerAgent",
-                basicRiskPlayerArgs);
-        basicRiskPlayer2AC.start();
-
-        AgentController basicRiskPlayer3AC = mainContainer.createNewAgent("BasicRiskPlayer3", "BasicRiskPlayerAgent",
-                basicRiskPlayerArgs);
-        basicRiskPlayer3AC.start();
-
-        AgentController basicRiskPlayer4AC = mainContainer.createNewAgent("BasicRiskPlayer4", "BasicRiskPlayerAgent",
-                basicRiskPlayerArgs);
-        basicRiskPlayer4AC.start();
+        for (String player : args) {
+            i++;
+            AgentController RiskPlayerAC;
+            if(player.equals("smart")) {
+                RiskPlayerAC = mainContainer.createNewAgent("SmartRiskPlayer" + i, "SmartRiskPlayerAgent",
+                        basicRiskPlayerArgs);
+                RiskPlayerAC.start();
+            } else {
+                RiskPlayerAC = mainContainer.createNewAgent("BasicRiskPlayer" + i, "BasicRiskPlayerAgent",
+                        basicRiskPlayerArgs);
+                RiskPlayerAC.start();
+            }
+        }
     }
 }

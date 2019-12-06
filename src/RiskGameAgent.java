@@ -168,6 +168,7 @@ public class RiskGameAgent extends Agent {
         }
 
         public int onEnd() {
+            addInitialMapInformation(riskMap.getInitialInformation());
             myAgent.addBehaviour(new GameLoopBehaviour());
             return 0;
         }
@@ -241,7 +242,11 @@ public class RiskGameAgent extends Agent {
                 notify.addReceiver(players.get(i));
             myAgent.send(notify);
             myAgent.addBehaviour(new MapDisplayBehaviour());
-            logger.saveGame();
+            
+            Iterator it = riskMap.getCountries().entrySet().iterator();
+            Map.Entry pair = (Map.Entry) it.next();
+            
+            logger.saveGame(((Country) pair.getValue()).getOwner().getLocalName());
             return 0;
         }
     }
@@ -308,6 +313,10 @@ public class RiskGameAgent extends Agent {
         default:
             break;
         }
+    }
+
+    public void addInitialMapInformation(HashMap<String, HashMap<String, Integer>> info) {
+        logger.addInitialMapInformation(info);
     }
 
     public void addRound() {

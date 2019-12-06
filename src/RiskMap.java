@@ -321,4 +321,32 @@ public class RiskMap implements Serializable {
 
         return true;
     }
+
+    public HashMap<String, HashMap<String, Integer>> getInitialInformation() {
+        HashMap<String, HashMap<String, Integer>> res = new HashMap<>();
+
+        Iterator it = continents.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+
+            Iterator it2 = ((Continent) pair.getValue()).countries.entrySet().iterator();
+            HashMap<String, Integer> playersCountriesCount = new HashMap<>();
+
+            while (it2.hasNext()) {
+                Map.Entry pair2 = (Map.Entry) it2.next();
+                Country c = ((Country) pair2.getValue());
+                String playerName = c.getOwner().getLocalName();
+                if (playersCountriesCount.containsKey(playerName)) {
+                    playersCountriesCount.put(playerName, playersCountriesCount.get(playerName) + 1);
+                } else {
+                    playersCountriesCount.put(playerName, 1);
+                }
+            }
+
+            res.put((String) pair.getKey(), playersCountriesCount);
+        }
+
+        return res;
+    }
 }

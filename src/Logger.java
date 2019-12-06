@@ -1,3 +1,4 @@
+import jade.core.AID;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,9 +9,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
-import jade.core.AID;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -26,6 +24,7 @@ public class Logger {
   HashMap<Integer, Round> rounds;
   HashMap<String, Country> countries;
   HashMap<String, Continent> continents;
+  HashMap<String, HashMap<String, Integer>> initialDisposal;
 
   public class Player {
     String name;
@@ -204,6 +203,7 @@ public class Logger {
     this.nPlayers = 0;
     this.players = new ArrayList<Player>();
     this.rounds = new HashMap<Integer, Round>();
+    this.initialDisposal = new HashMap<>();
   }
 
   public void addPlayer(final String name, final String localName) {
@@ -262,8 +262,7 @@ public class Logger {
     nRounds = rounds.size();
   }
 
-  private void saveHeader(JSONObject object) {
-    JSONObject header = new JSONObject();
+  private void saveInformation(JSONObject header) {
     header.put("nPlayers", nPlayers);
     header.put("nRounds", nRounds);
 
@@ -272,15 +271,35 @@ public class Logger {
     for (Player p : players) {
       i++;
       JSONObject player = new JSONObject();
-      player.put("name", p.name);
-      player.put("localName", p.localName);
+      player.put("name", p.localName);
+      player.put("id", p.localName.charAt(p.localName.length() -1));
       playersObject.add(player);
     }
+    
     header.put("players", playersObject);
 
-    saveMap(header);
+    //saveMap(header);
+  }
 
-    object.put("header", header);
+  public void saveInitialMapInformation(JSONObject object) {
+    Iterator it = this.initialDisposal.entrySet().iterator();
+    JSONArray continentsObject = new JSONArray();
+
+    // while (it.hasNext()) {
+    //   Map.Entry pair = (Map.Entry) it.next();
+
+    //   Iterator it2 = ((HashMap<String, Integer>) pair.getValue()).entrySet().iterator();
+    //   JSONObject continent = new JSONObject();
+    //   continent.put("name", (String) pair.getKey());
+
+    //   while (it2.hasNext()) {
+    //     Map.Entry pair2 = (Map.Entry) it2.next();
+    //     int value = ((Integer) pair2.getValue());
+
+    //   }
+    //   continentsObject.add(continent);
+    // }
+    // object.put("continents", continentsObject);
   }
 
   public void saveBorders(HashMap<String, Country> cBorders, JSONArray bordersArray) {
@@ -348,6 +367,14 @@ public class Logger {
   public void saveRound(int roundID, Round round, JSONObject object) {
     object.put("id", roundID);
 
+    Iterator it = round.moves.entrySet().iterator();
+
+    while (it.hasNext()) {
+      Map.Entry pair = (Map.Entry) it.next();
+      // (Move) pair.getValue();
+
+    }
+
   }
 
   public void saveRounds(JSONObject object) {
@@ -364,21 +391,27 @@ public class Logger {
     object.put("rounds", roundsArray);
   }
 
-  public void saveGame() {
+  public void addInitialMapInformation(HashMap<String, HashMap<String, Integer>> info) {
+    this.initialDisposal = info;
+  }
+
+  public void saveGame(String winner) {
     JSONObject object = new JSONObject();
 
-    saveHeader(object);
+    saveInformation(object);
+
+    saveInitialMapInformation(object);
     // saveRounds(object);
+
+    object.put("winner", winner);
 
     System.out.println("Save Game Finished!");
 
     // Save object
     try {
-      SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-      Files.write(Paths.get("Logs/" + dateFormat.format(new Date()) + ".json"), object.toJSONString().getBytes());
+      Files.write(Paths.get("Logs/auxiliar.json"), object.toJSONString().getBytes());
     } catch (Exception e) {
       System.out.println("ERROR: " + e.toString());
     }
-
   }
 }
