@@ -285,21 +285,20 @@ public class Logger {
     Iterator it = this.initialDisposal.entrySet().iterator();
     JSONArray continentsObject = new JSONArray();
 
-    // while (it.hasNext()) {
-    //   Map.Entry pair = (Map.Entry) it.next();
+    while (it.hasNext()) {
+      Map.Entry pair = (Map.Entry) it.next();
 
-    //   Iterator it2 = ((HashMap<String, Integer>) pair.getValue()).entrySet().iterator();
-    //   JSONObject continent = new JSONObject();
-    //   continent.put("name", (String) pair.getKey());
+      Iterator it2 = ((HashMap<String, Integer>) pair.getValue()).entrySet().iterator();
+      JSONObject continent = new JSONObject();
+      continent.put("name", (String) pair.getKey());
 
-    //   while (it2.hasNext()) {
-    //     Map.Entry pair2 = (Map.Entry) it2.next();
-    //     int value = ((Integer) pair2.getValue());
-
-    //   }
-    //   continentsObject.add(continent);
-    // }
-    // object.put("continents", continentsObject);
+      while (it2.hasNext()) {
+        Map.Entry pair2 = (Map.Entry) it2.next();
+        continent.put((String) pair2.getKey(), (Integer) pair2.getValue());
+      }
+      continentsObject.add(continent);
+    }
+    object.put("continents", continentsObject);
   }
 
   public void saveBorders(HashMap<String, Country> cBorders, JSONArray bordersArray) {
