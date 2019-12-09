@@ -36,7 +36,7 @@ public class RiskMap implements Serializable {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("[Risk Game Agent] Could not load countries");
+            // System.err.println("[Risk Game Agent] Could not load countries");
         }
 
         try {
@@ -50,7 +50,7 @@ public class RiskMap implements Serializable {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("[Risk Game Agent] Could not load borders");
+            // System.err.println("[Risk Game Agent] Could not load borders");
         }
 
         try {
@@ -63,7 +63,7 @@ public class RiskMap implements Serializable {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("[Risk Game Agent] Could not load bonus");
+            // System.err.println("[Risk Game Agent] Could not load bonus");
         }
     }
 

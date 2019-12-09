@@ -70,8 +70,8 @@ public class RiskGameAgent extends Agent {
     class WaitForPlayers extends Behaviour {
         public void action() {
             int playersLeft = (((RiskGameAgent) myAgent).numberPlayers - ((RiskGameAgent) myAgent).players.size());
-            System.out.println(
-                    "[RiskGameAgent] Waiting for " + playersLeft + " more player" + (playersLeft != 1 ? "s." : '.'));
+            // System.out.println(
+                    //"[RiskGameAgent] Waiting for " + playersLeft + " more player" + (playersLeft != 1 ? "s." : '.'));
             ACLMessage msg = receive();
 
             if (msg != null) {
@@ -83,7 +83,7 @@ public class RiskGameAgent extends Agent {
                     reply.setContent("[ALREADY_JOINED]\nYou are already on the player list.");
                 } else {
                     players.add(newPlayer);
-                    System.out.println("[RiskGameAgent] Added " + newPlayer.getLocalName() + "to the player list.");
+                    // System.out.println("[RiskGameAgent] Added " + newPlayer.getLocalName() + "to the player list.");
                     reply.setPerformative(ACLMessage.AGREE);
                     reply.setContent("[ADDED]\nAdded you to the player list.");
                 }
@@ -104,7 +104,7 @@ public class RiskGameAgent extends Agent {
 
             addLoggerInformation(LoggerInformation.SETUP_PLAYERS, ((RiskGameAgent) myAgent).players.get(0), null);
 
-            System.out.println("[RiskGameAgent] Got all players, starting game.");
+            // System.out.println("[RiskGameAgent] Got all players, starting game.");
             Collections.shuffle(players);
 
             myAgent.addBehaviour(new RiskGameAgentListenerBehaviour());
@@ -116,9 +116,9 @@ public class RiskGameAgent extends Agent {
 
     class MapDisplayBehaviour extends Behaviour {
         public void action() {
-            System.out.println(((RiskGameAgent) myAgent).players);
-            System.out.println(((RiskGameAgent) myAgent).riskMap);
-            System.out.println("GAME FINISHED!");
+            // System.out.println(((RiskGameAgent) myAgent).players);
+            // System.out.println(((RiskGameAgent) myAgent).riskMap);
+            // System.out.println("GAME FINISHED!");
         }
 
         public boolean done() {
@@ -247,6 +247,12 @@ public class RiskGameAgent extends Agent {
             Map.Entry pair = (Map.Entry) it.next();
             
             logger.saveGame(((Country) pair.getValue()).getOwner().getLocalName());
+            System.exit(0);
+            // try {
+            //     myAgent.getContainerController().getPlatformController().kill(); 
+            // } catch (Exception e) {
+            // }
+
             return 0;
         }
     }

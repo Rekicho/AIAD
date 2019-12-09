@@ -24,7 +24,7 @@ public abstract class RiskPlayerBehaviour extends Behaviour {
             ACLMessage msg = myAgent.receive();
             if(msg != null)
             {
-                System.out.println("[" + myAgent.getLocalName() + "] Joined " + riskGameAgentAID.getLocalName() + " game.");
+                // System.out.println("[" + myAgent.getLocalName() + "] Joined " + riskGameAgentAID.getLocalName() + " game.");
                 replyReceived = true;
             }
         }

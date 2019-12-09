@@ -2,7 +2,9 @@
 *.class
 
 APDescription.txt
-MTPS-Main-Container.txt
+MTPS*
+
+logs/
 
 compile.sh
 win-compile.bat

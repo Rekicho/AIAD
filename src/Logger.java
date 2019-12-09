@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.nio.file.StandardOpenOption;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -25,7 +26,7 @@ public class Logger {
   HashMap<String, Country> countries;
   HashMap<String, Continent> continents;
   HashMap<String, HashMap<String, Integer>> initialDisposal;
-
+  
   public class Player {
     String name;
     String localName;
@@ -83,8 +84,8 @@ public class Logger {
     public void appendDefendInfo(final int round, final Player player, final LoggerPhase phase, final String defend) {
       final Key key = new Key(round, player, phase);
 
-      if (!moves.containsKey(key))
-        System.out.println("ERROR: Defend must exist with an attack");
+      //if (!moves.containsKey(key))
+        //System.out.println("ERROR: Defend must exist with an attack");
 
       final String[] params = defend.split(" ");
       final Attack attack = (Attack) moves.get(key).get(moves.get(key).size() - 1);
@@ -94,8 +95,8 @@ public class Logger {
     public void appendFightInfo(final int round, final Player player, final LoggerPhase phase, final String fight) {
       final Key key = new Key(round, player, phase);
 
-      if (!moves.containsKey(key))
-        System.out.println("ERROR: Fight must exist with an attack");
+      //if (!moves.containsKey(key))
+        //System.out.println("ERROR: Fight must exist with an attack");
 
       final String[] params = fight.split(" ");
       final Attack attack = (Attack) moves.get(key).get(moves.get(key).size() - 1);
@@ -404,13 +405,25 @@ public class Logger {
 
     object.put("winner", winner);
 
-    System.out.println("Save Game Finished!");
+    //System.out.println("Save Game Finished!");
+
+    String result = "";
+
+    for(Player player:players)
+      result += player.name.split("Risk")[0] + ",";
+
+    for(int i = players.size(); i < 6; i++)
+      result += ",";
+    
+    
+    result += nRounds + "," + winner.split("Risk")[0] + "\n";
 
     // Save object
     try {
-      Files.write(Paths.get("Logs/auxiliar.json"), object.toJSONString().getBytes());
+      //Files.write(Paths.get("Logs/auxiliar.json"), object.toJSONString().getBytes());
+      Files.write(Paths.get("Logs/risk.csv"), result.getBytes(), StandardOpenOption.APPEND);
     } catch (Exception e) {
-      System.out.println("ERROR: " + e.toString());
+      //System.out.println("ERROR: " + e.toString());
     }
   }
 }

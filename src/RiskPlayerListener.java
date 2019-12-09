@@ -8,7 +8,7 @@ public class RiskPlayerListener extends Behaviour {
 
     public void readMap(String map) {
         ((BasicRiskPlayerAgent) myAgent).riskMap = (RiskMap) Utils.fromString(map);
-        System.out.println("[" + myAgent.getLocalName() + "] Got Map");
+        // System.out.println("[" + myAgent.getLocalName() + "] Got Map");
     }
 
     public void sendGameAction(ACLMessage msg, String response) {
