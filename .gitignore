@@ -4,7 +4,7 @@
 APDescription.txt
 MTPS*
 
-logs/
+logs/*.json
 
 compile.sh
 win-compile.bat

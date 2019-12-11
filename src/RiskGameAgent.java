@@ -247,11 +247,7 @@ public class RiskGameAgent extends Agent {
             Map.Entry pair = (Map.Entry) it.next();
             
             logger.saveGame(((Country) pair.getValue()).getOwner().getLocalName());
-            System.exit(0);
-            // try {
-            //     myAgent.getContainerController().getPlatformController().kill(); 
-            // } catch (Exception e) {
-            // }
+            Runtime.getRuntime().halt(0);
 
             return 0;
         }

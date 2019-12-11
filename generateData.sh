@@ -1,1 +1,1 @@
-for i in $(seq 1 10); do java Risk ; done
+for i in $(seq 1 $1); do java Risk ; done
