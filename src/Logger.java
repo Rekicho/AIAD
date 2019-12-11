@@ -413,7 +413,7 @@ public class Logger {
       result += player.name.split("Risk")[0] + ",";
 
     for(int i = players.size(); i < 6; i++)
-      result += ",";
+      result += "null,";
     
     
     result += nRounds + "," + winner.split("Risk")[0] + "\n";
