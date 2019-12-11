@@ -116,7 +116,8 @@ public class Country implements Serializable {
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
 
-            if(((Country) pair.getValue()).getOwner().equals(this.owner))
+            if(((Country) pair.getValue()).getOwner() != null && this.owner != null &&
+                ((Country) pair.getValue()).getOwner().equals(this.owner))
                 res.add((Country) pair.getValue());
         }
 
