@@ -408,15 +408,16 @@ public class Logger {
     //System.out.println("Save Game Finished!");
 
     String result = "";
+    int nSmart = 0, nBasic = 0;
 
-    for(Player player:players)
-      result += player.name.split("Risk")[0] + ",";
+    for(Player player:players) {
+      if(player.name.split("Risk")[0].equals("Smart")) 
+        nSmart++;
+      else
+        nBasic++;
+    }
 
-    for(int i = players.size(); i < 6; i++)
-      result += "null,";
-    
-    
-    result += nRounds + "," + winner.split("Risk")[0] + "\n";
+    result += nSmart + "," + nBasic + "," + nRounds + "," + winner.split("Risk")[0] + "\n";
 
     // Save object
     try {
